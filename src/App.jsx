@@ -59,3 +59,5 @@ async function dbSaveSection(section) {
 async function dbDeleteSection(id) {
   await supabase.from("cookbook_sections").delete().eq("id", id);
 }
+export default Cookbook;
+
