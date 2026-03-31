@@ -59,5 +59,24 @@ async function dbSaveSection(section) {
 async function dbDeleteSection(id) {
   await supabase.from("cookbook_sections").delete().eq("id", id);
 }
+function Cookbook() {
+  const [sections, setSections] = useState([]);
+  const [activeTab, setActiveTab] = useState('all');
+
+  // This is where the "Vintage Binder" magic happens
+  return (
+    <div style={{ backgroundColor: C.paper, minHeight: '100vh', fontFamily: C.font }}>
+      {/* Binder Spine Decoration */}
+      <div style={{ borderLeft: `12px solid ${C.spine}`, padding: '20px' }}>
+        <h1>My Vintage Recipe Binder</h1>
+        
+        {/* Your Tabs and Recipe Cards would go here */}
+        <div style={ruledLineStyle}>
+           <p>Start adding recipes to your binder...</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 export default Cookbook;
 
