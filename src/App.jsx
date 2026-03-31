@@ -170,7 +170,26 @@ function RecipeModal({ recipe, sections, defaultSectionId, onSave, onClose }) {
       source: source.trim(), notes: notes.trim(), rating,
     });
     setBusy(false);
+    // Inside RecipeModal's save function
+await onSave({
+  id: recipe?.id || `rec-${Date.now()}`,
+  created_at: recipe?.created_at, // Add this line!
+  title: title.trim(), section_id: secId,
+  // ... rest of your fields
+});
+
   };
+// In RecipeModal's button row:
+{recipe?.id && (
+  <button onClick={() => onDelete(recipe.id)} style={{ background: "transparent", color: C.red, border: "none", cursor: "pointer", fontSize: "0.82rem", marginRight: "auto" }}>
+    Delete Recipe
+  </button>
+)}
+const deleteSection = async (id) => { 
+  await dbDeleteSection(id); 
+  setSections(prev => prev.filter(s => s.id !== id)); 
+  setRecipes(prev => prev.filter(r => r.section_id !== id)); // Add this line
+};
 
   const inp = { width: "100%", background: C.pageInner, border: `1px solid ${C.spineFaint}`, borderRadius: 2, color: C.ink, padding: "0.32rem 0.55rem", fontSize: "0.88rem", fontFamily: C.fontSans, outline: "none", boxSizing: "border-box" };
   const lbl = { fontSize: "0.68rem", fontFamily: C.fontSans, color: C.inkMuted, display: "block", marginBottom: "0.22rem", fontWeight: "600", letterSpacing: "0.04em" };
@@ -297,6 +316,12 @@ function RecipePage({ recipe, sectionName, onEdit, onBack }) {
         </div>
       </div>
     </div>
+    <button onClick={() => setRecipeModal({})}
+  disabled={sections.length === 0}
+  style={{ ... opacity: sections.length === 0 ? 0.5 : 1, cursor: sections.length === 0 ? "not-allowed" : "pointer" }}>
+  + Add Recipe
+</button>
+
   );
 }
 
@@ -374,6 +399,13 @@ function SectionTable({ section, recipes, onSectionClick, onEditSection, onDelet
         </div>
       )}
     </div>
+    const deleteRecipe = async (id) => {
+  await dbDeleteRecipe(id);
+  setRecipes(prev => prev.filter(r => r.id !== id));
+  setRecipeModal(null);
+  setNav(null); // Send them back to the main view
+};
+
   );
 }
 
