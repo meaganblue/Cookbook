@@ -685,7 +685,10 @@ export default function Cookbook() {
   const [activeTab, setActiveTab] = useState("DASHBOARD");
 
   // When navigating to a recipe/section, auto-switch to RECIPES tab
-  const goNav = (navVal) => { setNav(navVal); if (navVal) setActiveTab("RECIPES"); else setActiveTab("DASHBOARD"); };
+  const goNav = (navVal) => { 
+  setNav(navVal); 
+  setActiveTab("RECIPES"); 
+};
 
   return (
     <div style={{ minHeight: "100vh", background: "#8B6B58", display: "flex", flexDirection: "column", fontFamily: C.fontSans, padding: "0.5rem" }}>
