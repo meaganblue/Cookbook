@@ -697,7 +697,7 @@ const saveRecipe = async (data) => {
               style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
               Print Book
             </button>
-          </button>
+        
           <button onClick= {handleAddRecipe}
             style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
               Add Recipe
@@ -907,5 +907,6 @@ const saveRecipe = async (data) => {
       )}
       {editSecModal && <EditSectionModal section={editSecModal} onSave={renameSection} onClose={() => setEditSecModal(null)} />}
     <div>
-  );
+    </div>
+      )};
                
