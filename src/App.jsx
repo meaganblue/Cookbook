@@ -585,7 +585,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
         <div style={{ padding: "0.4rem 0.6rem", display: "flex", flexDirection: "column", gap: "0.3rem", background: "#FAF4FC", flex: 1 }}>
           {Array.from({ length: rows }).map((_, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, rowHeight:15, flexShrink: 0 }}>〜</span>
+              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, rowHeight:10, flexShrink: 0 }}>〜</span>
               <input value={cells[i] || ""} onChange={e => update(i, e.target.value)}
                 style={{ flex: 1, background: "transparent", border: "none", borderBottom: cellBorder, outline: "none", fontFamily: C.fontSans, fontSize: "0.82rem", color: C.inkMid, padding: "0.18rem 0" }} />
               <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
@@ -814,7 +814,7 @@ export default function Cookbook() {
                   title="KITCHEN NOTES"
                   titleCenter
                   isNotes
-                  rows={12}
+                  rows={10}
                 />
               </div>
             )}
