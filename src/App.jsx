@@ -625,9 +625,10 @@ export default function Cookbook() {
                 {/* NEW DASHBOARD LAYOUT FROM YOUR IMAGE */}
             import React from 'react';
 
-const CookbookPage = () => {
+
+  const CookbookPage = () => {
   // Array to map through for generating our tabs cleanly
-  
+  const tabs = [
     { name: 'DASHBOARD', active: false },
     { name: 'RECIPES', active: false },
     { name: 'CONVERSIONS', active: true }, // The active tab
@@ -635,6 +636,10 @@ const CookbookPage = () => {
     { name: 'KITCHEN NOTES', active: false },
     { name: 'PLANNER', active: false },
   ];
+
+  // Rest of your component logic...
+};
+
 
   return (
     // Main wrapper: h-screen ensures no vertical scrolling
