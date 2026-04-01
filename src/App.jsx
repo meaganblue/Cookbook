@@ -878,7 +878,7 @@ export default function Cookbook() {
                     color: active ? C.accent : "rgba(240,225,200,0.75)",
                     whiteSpace: "wrap",
                     lineHeight: 1,
-  height: 35;
+  height: 35}
                 
                   }}>{tab}</span>
                 </button>
