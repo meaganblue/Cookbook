@@ -635,18 +635,23 @@ export default function Cookbook() {
 
   const handleLogout = async () => { await supabase.auth.signOut(); setAuthUser(null); setSections([]); setRecipes([]); };
 
-  
-const saveRecipe = async (data) => {
-    const rec = { ...data, user_id: authUser.id, created_at: data.created_at || new Date().toISOString() };
-    const saved = await dbUpsertRecipe(rec);
-    const final = saved || rec;
-    setRecipes(prev => { const ex = prev.find(r => r.id === final.id); return ex ? prev.map(r => r.id === final.id ? final : r) : [final, ...prev]; });
-    setRecipeModal(null);
-    if (nav?.recipe?.id === final.id) setNav(n => ({ ...n, recipe: final }));
+  const addSection = async () => {
+    if (!addSecName.trim()) return;
+    const s = { id: `sec-${Date.now()}`, user_id: authUser.id, name: addSecName.trim(), position: sections.length };
+    const saved = await dbUpsertSection(s);
+    setSections(prev => [...prev, saved || s]);
+    setAddSecName("");
   };
-  
 
-  
+  const renameSection = async (name) => {
+    const updated = { ...editSecModal, name: name.trim() };
+    await dbUpsertSection(updated);
+    setSections(prev => prev.map(s => s.id === updated.id ? updated : s));
+    setEditSecModal(null);
+  };
+
+  const deleteSection = async (id) => { await dbDeleteSection(id); setSections(prev => prev.filter(s => s.id !== id)); };
+
   const deleteRecipe = async (id) => {
     await dbDeleteRecipe(id);
     setRecipes(prev => prev.filter(r => r.id !== id));
@@ -654,7 +659,14 @@ const saveRecipe = async (data) => {
     if (nav?.recipe?.id === id) setNav(nav?.section ? { section: nav.section } : null);
   };
 
-  
+  const saveRecipe = async (data) => {
+    const rec = { ...data, user_id: authUser.id, created_at: data.created_at || new Date().toISOString() };
+    const saved = await dbUpsertRecipe(rec);
+    const final = saved || rec;
+    setRecipes(prev => { const ex = prev.find(r => r.id === final.id); return ex ? prev.map(r => r.id === final.id ? final : r) : [final, ...prev]; });
+    setRecipeModal(null);
+    if (nav?.recipe?.id === final.id) setNav(n => ({ ...n, recipe: final }));
+  };
 
   const handlePrint = () => {
     const html = generatePrintHTML(sections, recipes);
@@ -697,11 +709,6 @@ const saveRecipe = async (data) => {
               style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
               Print Book
             </button>
-        
-          <button onClick= {handleAddRecipe}
-            style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
-              Add Recipe
-          </button>
           </div>
         </div>
 
@@ -875,7 +882,7 @@ const saveRecipe = async (data) => {
           </div>
         </div>
       </div>
-)
+
       {/* FLOATING RECIPE/SECTION BUTTONS — only on recipes tab */}
       {activeTab === "RECIPES" && !nav?.recipe && !nav?.section && (
         <div style={{ position: "fixed", bottom: "1.2rem", right: "3rem", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.5rem", zIndex: 50 }}>
@@ -906,9 +913,6 @@ const saveRecipe = async (data) => {
         />
       )}
       {editSecModal && <EditSectionModal section={editSecModal} onSave={renameSection} onClose={() => setEditSecModal(null)} />}
-    <div>
     </div>
-      );
-               
-    </div>
-    )}
+  );
+              }
