@@ -431,140 +431,42 @@ function SectionTOC({ section, recipes, onRecipeClick, onBack }) {
 // ─────────────────────────────────────────────
 // SECTION TABLE (main binder view)
 // ─────────────────────────────────────────────
-import React from 'react';
-
-const CookbookPage = () => {
-  // Array to map through for generating our tabs cleanly
-  const tabs = [
-    { name: 'DASHBOARD', active: false },
-    { name: 'RECIPES', active: false },
-    { name: 'CONVERSIONS', active: true }, // The active tab
-    { name: 'TIPS', active: false },
-    { name: 'KITCHEN NOTES', active: false },
-    { name: 'PLANNER', active: false },
-  ];
-
+function SectionTable({ section, recipes, onSectionClick, onEditSection, onDeleteSection, onAddRecipe }) {
+  const recs = recipes.filter(r => r.section_id === section.id);
+  const [collapsed, setCollapsed] = useState(false);
   return (
-    // Main wrapper: h-screen ensures no vertical scrolling
-    <div className="h-screen w-full bg-[#fdfbf6] flex flex-col font-sans text-gray-800 overflow-hidden">
-      
-      {/* Top Navigation / Header */}
-      <header className="flex justify-between items-center px-8 py-3 shrink-0">
-        <h1 className="text-3xl tracking-tight font-medium text-[#2d2d2d]">Meagan's Cookbook</h1>
-        <div className="flex gap-3">
-          <button className="px-3 py-1 bg-[#e8e4d9] border border-gray-400 rounded shadow-sm text-sm hover:bg-[#dedad0] transition-colors">
-            Log Out
-          </button>
-          <button className="px-3 py-1 bg-[#e8e4d9] border border-gray-400 rounded shadow-sm text-sm hover:bg-[#dedad0] transition-colors">
-            Print Book
-          </button>
-        </div>
-      </header>
-
-      {/* Binder Area */}
-      <main className="flex-1 w-full max-w-6xl mx-auto px-4 pb-6 overflow-hidden flex justify-center items-stretch relative">
-        
-        {/* Binder Backing/Cover */}
-        <div className="w-full h-full bg-[#7a6458] rounded-xl flex shadow-2xl border border-[#524138]">
-          
-          {/* Left Binder Rings */}
-          <div className="w-10 flex flex-col justify-evenly items-center shrink-0 py-10 z-20 relative">
-            <div className="absolute left-4 top-0 bottom-0 w-2 bg-[#5e4b41] rounded-full shadow-inner"></div>
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="w-8 h-4 bg-gray-300 rounded-full border-[3px] border-gray-500 shadow-md -ml-2 z-10"></div>
-            ))}
-          </div>
-
-          {/* Paper Content Area */}
-          <div className="flex-1 bg-[#fbf5e6] rounded-lg border-2 border-[#5e4b41] my-2 shadow-inner p-4 flex flex-col gap-4 overflow-hidden z-10 relative">
-            
-            {/* Top Section: Measurement Equivalents */}
-            <section className="flex-[1.2] border-4 border-[#b49db5] rounded-md flex flex-col overflow-hidden bg-[#faf4fc]">
-              <div className="bg-[#ebd9ec] text-[#4d3a4d] py-1 text-center font-bold text-lg tracking-widest border-b-4 border-[#b49db5] flex items-center justify-center gap-2 uppercase">
-                <span>★</span> Measurement Equivalents <span>★</span>
+    <div style={{ marginBottom: "0.85rem", border: `1px solid ${C.spineFaint}`, borderRadius: 4, overflow: "hidden", background: C.pageInner, boxShadow: "0 1px 4px rgba(0,0,0,0.07)" }}>
+      <div style={{ background: C.paper, borderBottom: `1px solid ${C.line}`, padding: "0.48rem 0.75rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
+        <button onClick={() => onSectionClick(section)} style={{ flex: 1, background: "none", border: "none", cursor: "pointer", textAlign: "left", padding: 0 }}>
+          <span style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.85rem", color: C.ink }}>{section.name}</span>
+          <span style={{ fontFamily: C.fontSans, fontSize: "0.68rem", color: C.inkMuted, marginLeft: "0.4rem" }}>({recs.length})</span>
+        </button>
+        <button onClick={() => onAddRecipe(section.id)} style={{ background: C.accentFade, border: `1px solid ${C.accent}`, borderRadius: 3, color: C.accent, padding: "0.16rem 0.45rem", fontSize: "0.62rem", fontFamily: C.fontSans, cursor: "pointer", fontWeight: "bold" }}>+ Recipe</button>
+        <button onClick={() => onEditSection(section)} style={{ background: "none", border: `1px solid ${C.spineFaint}`, borderRadius: 3, color: C.inkMuted, padding: "0.16rem 0.42rem", fontSize: "0.62rem", fontFamily: C.fontSans, cursor: "pointer" }}>✎</button>
+        <button onClick={() => onDeleteSection(section.id)} style={{ background: "none", border: "none", color: C.spineFaint, fontSize: "0.85rem", cursor: "pointer", padding: "0 0.1rem", lineHeight: 1, transition: "color 0.12s" }}
+          onMouseEnter={e => e.currentTarget.style.color = C.red} onMouseLeave={e => e.currentTarget.style.color = C.spineFaint}>×</button>
+        <button onClick={() => setCollapsed(c => !c)} style={{ background: "none", border: "none", color: C.inkFaint, fontSize: "0.6rem", cursor: "pointer", padding: "0 0.1rem" }}>{collapsed ? "▼" : "▲"}</button>
+      </div>
+      {!collapsed && (
+        <div>
+          {recs.length === 0 && <div style={{ padding: "0.75rem 1rem", fontFamily: C.fontSans, fontSize: "0.78rem", color: C.inkFaint, fontStyle: "italic" }}>No recipes yet.</div>}
+          {recs.map((r, i) => (
+            <button key={r.id} onClick={() => onSectionClick(section, r)}
+              style={{ width: "100%", background: "transparent", border: "none", borderTop: i > 0 ? `1px solid ${C.line}` : "none", padding: "0.45rem 0.75rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", textAlign: "left", transition: "background 0.1s" }}
+              onMouseEnter={e => e.currentTarget.style.background = C.accentFade}
+              onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+              <span style={{ fontFamily: C.fontSans, fontSize: "0.82rem", color: C.inkMid }}>{r.title}</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                {r.rating > 0 && <Stars value={r.rating} size="0.65rem" />}
+                <span style={{ fontSize: "0.62rem", color: C.inkFaint }}>→</span>
               </div>
-              {/* Fake Table Grid */}
-              <div className="flex-1 grid grid-cols-6 divide-x-2 divide-y-2 divide-[#b49db5] bg-[#fbf5e6]">
-                {[...Array(30)].map((_, i) => (
-                  <div key={i} className="h-full w-full"></div>
-                ))}
-              </div>
-            </section>
-
-            {/* Middle Section: Split Row */}
-            <section className="flex-1 flex gap-4">
-              {/* Safe Cooking Temps */}
-              <div className="flex-1 border-4 border-[#b49db5] rounded-md flex flex-col overflow-hidden bg-[#faf4fc]">
-                <div className="bg-[#ebd9ec] text-[#4d3a4d] py-2 text-center font-bold text-sm tracking-wide border-b-4 border-[#b49db5] uppercase leading-tight relative">
-                  Safe Cooking<br />Temps
-                  <span className="absolute right-3 top-2 text-xl">🌡️</span>
-                </div>
-                <div className="flex-1 grid grid-cols-2 divide-x-2 divide-y-2 divide-[#b49db5] bg-[#fbf5e6]">
-                  {[...Array(8)].map((_, i) => <div key={i}></div>)}
-                </div>
-              </div>
-
-              {/* Common Substitutions */}
-              <div className="flex-1 border-4 border-[#b49db5] rounded-md flex flex-col overflow-hidden bg-[#faf4fc]">
-                <div className="bg-[#ebd9ec] text-[#4d3a4d] py-2 text-center font-bold text-sm tracking-wide border-b-4 border-[#b49db5] uppercase leading-tight">
-                  Common<br />Substitutions
-                </div>
-                <div className="flex-1 grid grid-cols-2 divide-x-2 divide-y-2 divide-[#b49db5] bg-[#fbf5e6]">
-                  {[...Array(8)].map((_, i) => <div key={i}></div>)}
-                </div>
-              </div>
-            </section>
-
-            {/* Bottom Section: Kitchen Notes */}
-            <section className="flex-1 border-4 border-[#b49db5] rounded-md flex flex-col overflow-hidden bg-[#faf4fc]">
-              <div className="bg-[#ebd9ec] text-[#4d3a4d] py-1 text-center font-bold text-lg tracking-widest border-b-4 border-[#b49db5] uppercase">
-                Kitchen Notes
-              </div>
-              <div className="flex-1 bg-[#fbf5e6] flex flex-col justify-evenly px-6 py-2">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="flex items-center gap-4 opacity-50">
-                    <span className="text-xl">〰️</span>
-                    <div className="h-0.5 flex-1 bg-gray-400 rounded"></div>
-                    <span className="text-xl">〰️</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-          </div>
-
-          {/* Right Stationary Tabs */}
-          <div className="w-14 flex flex-col justify-start items-stretch py-4 pr-1 gap-1 z-0">
-            {tabs.map((tab, idx) => (
-              <button 
-                key={idx} 
-                style={{ writingMode: 'vertical-rl' }}
-                className={`flex-1 flex items-center justify-center rounded-r-xl border-y border-r border-[#381c22] shadow-md transition-colors ${
-                  tab.active 
-                    ? 'bg-[#7a3241] text-[#fbf5e6]' 
-                    : 'bg-[#5c2331] text-[#e0cfd1] hover:bg-[#6e2b3b]'
-                }`}
-              >
-                <span className="text-xs font-semibold tracking-widest uppercase rotate-180 py-2">
-                  {tab.name}
-                </span>
-              </button>
-            ))}
-            
-            {/* Add New Section Tab */}
-            <button className="flex-1 flex flex-col items-center justify-center rounded-r-xl border border-[#524138] bg-[#9e8374] text-[#fbf5e6] shadow-md mt-4 hover:bg-[#b09687] transition-colors leading-tight">
-               <span className="text-lg mb-1">⊕</span>
-               <span className="text-[10px] text-center font-medium">Add<br/>New<br/>Section</span>
             </button>
-          </div>
-
+          ))}
         </div>
-      </main>
+      )}
     </div>
   );
-};
-
-export default CookbookPage;
-
+}
 
 // ─────────────────────────────────────────────
 // EDIT SECTION NAME MODAL
@@ -721,24 +623,140 @@ export default function Cookbook() {
                 {loading && <div style={{ color: C.inkFaint, textAlign: "center", padding: "2rem", fontStyle: "italic" }}>Opening cookbook…</div>}
                 
                 {/* NEW DASHBOARD LAYOUT FROM YOUR IMAGE */}
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.85rem", marginBottom: "1.5rem" }}>
-                  <div style={{ flex: "1 1 300px", display: "flex" }}>
-                    <DashboardBox title="SECTION 1 (3 COLUMNS)" flex={1}>
-                       <EditableTable cols={3} rows={12} />
-                    </DashboardBox>
-                  </div>
-                  <div style={{ flex: "1 1 200px", display: "flex", flexDirection: "column", gap: "0.85rem" }}>
-                     <DashboardBox title="SECTION 2 (2 COLUMNS)">
-                        <EditableTable cols={2} rows={5} />
-                     </DashboardBox>
-                     <DashboardBox title="SECTION 3 (BLANK)" flex={1}>
-                        <textarea 
-                           style={{ flex: 1, minHeight: "120px", width: "100%", background: "transparent", border: "none", outline: "none", resize: "none", fontFamily: C.fontSans, fontSize: "0.85rem", color: C.inkMid, lineHeight: "30px", backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent 29px, ${C.line} 29px, ${C.line} 30px)`, backgroundAttachment: "local", padding: 0 }} 
-                           placeholder="Tap to type notes..." 
-                        />
-                     </DashboardBox>
-                  </div>
+            import React from 'react';
+
+const CookbookPage = () => {
+  // Array to map through for generating our tabs cleanly
+  const tabs = [
+    { name: 'DASHBOARD', active: false },
+    { name: 'RECIPES', active: false },
+    { name: 'CONVERSIONS', active: true }, // The active tab
+    { name: 'TIPS', active: false },
+    { name: 'KITCHEN NOTES', active: false },
+    { name: 'PLANNER', active: false },
+  ];
+
+  return (
+    // Main wrapper: h-screen ensures no vertical scrolling
+    <div className="h-screen w-full bg-[#fdfbf6] flex flex-col font-sans text-gray-800 overflow-hidden">
+      
+      {/* Top Navigation / Header */}
+      <header className="flex justify-between items-center px-8 py-3 shrink-0">
+        <h1 className="text-3xl tracking-tight font-medium text-[#2d2d2d]">Meagan's Cookbook</h1>
+        <div className="flex gap-3">
+          <button className="px-3 py-1 bg-[#e8e4d9] border border-gray-400 rounded shadow-sm text-sm hover:bg-[#dedad0] transition-colors">
+            Log Out
+          </button>
+          <button className="px-3 py-1 bg-[#e8e4d9] border border-gray-400 rounded shadow-sm text-sm hover:bg-[#dedad0] transition-colors">
+            Print Book
+          </button>
+        </div>
+      </header>
+
+      {/* Binder Area */}
+      <main className="flex-1 w-full max-w-6xl mx-auto px-4 pb-6 overflow-hidden flex justify-center items-stretch relative">
+        
+        {/* Binder Backing/Cover */}
+        <div className="w-full h-full bg-[#7a6458] rounded-xl flex shadow-2xl border border-[#524138]">
+          
+          {/* Left Binder Rings */}
+          <div className="w-10 flex flex-col justify-evenly items-center shrink-0 py-10 z-20 relative">
+            <div className="absolute left-4 top-0 bottom-0 w-2 bg-[#5e4b41] rounded-full shadow-inner"></div>
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="w-8 h-4 bg-gray-300 rounded-full border-[3px] border-gray-500 shadow-md -ml-2 z-10"></div>
+            ))}
+          </div>
+
+          {/* Paper Content Area */}
+          <div className="flex-1 bg-[#fbf5e6] rounded-lg border-2 border-[#5e4b41] my-2 shadow-inner p-4 flex flex-col gap-4 overflow-hidden z-10 relative">
+            
+            {/* Top Section: Measurement Equivalents */}
+            <section className="flex-[1.2] border-4 border-[#b49db5] rounded-md flex flex-col overflow-hidden bg-[#faf4fc]">
+              <div className="bg-[#ebd9ec] text-[#4d3a4d] py-1 text-center font-bold text-lg tracking-widest border-b-4 border-[#b49db5] flex items-center justify-center gap-2 uppercase">
+                <span>★</span> Measurement Equivalents <span>★</span>
+              </div>
+              {/* Fake Table Grid */}
+              <div className="flex-1 grid grid-cols-6 divide-x-2 divide-y-2 divide-[#b49db5] bg-[#fbf5e6]">
+                {[...Array(30)].map((_, i) => (
+                  <div key={i} className="h-full w-full"></div>
+                ))}
+              </div>
+            </section>
+
+            {/* Middle Section: Split Row */}
+            <section className="flex-1 flex gap-4">
+              {/* Safe Cooking Temps */}
+              <div className="flex-1 border-4 border-[#b49db5] rounded-md flex flex-col overflow-hidden bg-[#faf4fc]">
+                <div className="bg-[#ebd9ec] text-[#4d3a4d] py-2 text-center font-bold text-sm tracking-wide border-b-4 border-[#b49db5] uppercase leading-tight relative">
+                  Safe Cooking<br />Temps
+                  <span className="absolute right-3 top-2 text-xl">🌡️</span>
                 </div>
+                <div className="flex-1 grid grid-cols-2 divide-x-2 divide-y-2 divide-[#b49db5] bg-[#fbf5e6]">
+                  {[...Array(8)].map((_, i) => <div key={i}></div>)}
+                </div>
+              </div>
+
+              {/* Common Substitutions */}
+              <div className="flex-1 border-4 border-[#b49db5] rounded-md flex flex-col overflow-hidden bg-[#faf4fc]">
+                <div className="bg-[#ebd9ec] text-[#4d3a4d] py-2 text-center font-bold text-sm tracking-wide border-b-4 border-[#b49db5] uppercase leading-tight">
+                  Common<br />Substitutions
+                </div>
+                <div className="flex-1 grid grid-cols-2 divide-x-2 divide-y-2 divide-[#b49db5] bg-[#fbf5e6]">
+                  {[...Array(8)].map((_, i) => <div key={i}></div>)}
+                </div>
+              </div>
+            </section>
+
+            {/* Bottom Section: Kitchen Notes */}
+            <section className="flex-1 border-4 border-[#b49db5] rounded-md flex flex-col overflow-hidden bg-[#faf4fc]">
+              <div className="bg-[#ebd9ec] text-[#4d3a4d] py-1 text-center font-bold text-lg tracking-widest border-b-4 border-[#b49db5] uppercase">
+                Kitchen Notes
+              </div>
+              <div className="flex-1 bg-[#fbf5e6] flex flex-col justify-evenly px-6 py-2">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="flex items-center gap-4 opacity-50">
+                    <span className="text-xl">〰️</span>
+                    <div className="h-0.5 flex-1 bg-gray-400 rounded"></div>
+                    <span className="text-xl">〰️</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+
+          {/* Right Stationary Tabs */}
+          <div className="w-14 flex flex-col justify-start items-stretch py-4 pr-1 gap-1 z-0">
+            {tabs.map((tab, idx) => (
+              <button 
+                key={idx} 
+                style={{ writingMode: 'vertical-rl' }}
+                className={`flex-1 flex items-center justify-center rounded-r-xl border-y border-r border-[#381c22] shadow-md transition-colors ${
+                  tab.active 
+                    ? 'bg-[#7a3241] text-[#fbf5e6]' 
+                    : 'bg-[#5c2331] text-[#e0cfd1] hover:bg-[#6e2b3b]'
+                }`}
+              >
+                <span className="text-xs font-semibold tracking-widest uppercase rotate-180 py-2">
+                  {tab.name}
+                </span>
+              </button>
+            ))}
+            
+            {/* Add New Section Tab */}
+            <button className="flex-1 flex flex-col items-center justify-center rounded-r-xl border border-[#524138] bg-[#9e8374] text-[#fbf5e6] shadow-md mt-4 hover:bg-[#b09687] transition-colors leading-tight">
+               <span className="text-lg mb-1">⊕</span>
+               <span className="text-[10px] text-center font-medium">Add<br/>New<br/>Section</span>
+            </button>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default CookbookPage;
+
                 {/* END NEW DASHBOARD LAYOUT */}
 
                 <div style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.1em", color: C.inkMuted, marginBottom: "0.5rem", marginTop: "1rem" }}>Your Saved Sections</div>
@@ -793,4 +811,4 @@ export default function Cookbook() {
       {editSecModal && <EditSectionModal section={editSecModal} onSave={renameSection} onClose={() => setEditSecModal(null)} />}
     </div>
   );
-}
+              }
