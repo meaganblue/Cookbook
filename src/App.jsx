@@ -266,7 +266,7 @@ function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onC
               {/* Right: Section pill */}
               <div style={{ flexShrink: 0, position: "relative" }}>
                 <button onClick={() => setShowSecPicker(p => !p)}
-                  style={{ background: C.accent, border: "none", borderRadius: 10, color: "#fff", padding: "0.5rem 0.9rem", fontSize: "0.85rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer", textAlign: "center", minWidth: 88, lineHeight: 1.4, whiteSpace: "pre-line" }}>
+                  style={{ background: C.accent, border: "none", borderRadius: 6, color: "#fff", padding: "0.3rem 0.5rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer", textAlign: "center", minWidth: 68, lineHeight: 1, whiteSpace: "pre-line" }}>
                   {selectedSection ? selectedSection.name : "Section\nchoice"}
                 </button>
                 {showSecPicker && (
@@ -444,7 +444,7 @@ function SectionTable({ section, recipes, onSectionClick, onEditSection, onDelet
       <div style={{ background: C.paper, borderBottom: `1px solid ${C.line}`, padding: "0.48rem 0.75rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
         <button onClick={() => onSectionClick(section)} style={{ flex: 1, background: "none", border: "none", cursor: "pointer", textAlign: "left", padding: 0 }}>
           <span style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.85rem", color: C.ink }}>{section.name}</span>
-          <span style={{ fontFamily: C.fontSans, fontSize: "0.68rem", color: C.inkMuted, marginLeft: "0.4rem" }}>({recs.length})</span>
+          <span style={{ fontFamily: C.fontSans, fontSize: "0.68rem", color: "3D2460", marginLeft: "0.4rem" }}>({recs.length})</span>
         </button>
         <button onClick={() => onAddRecipe(section.id)} style={{ background: C.accentFade, border: `1px solid ${C.accent}`, borderRadius: 3, color: C.accent, padding: "0.16rem 0.45rem", fontSize: "0.62rem", fontFamily: C.fontSans, cursor: "pointer", fontWeight: "bold" }}>+ Recipe</button>
         <button onClick={() => onEditSection(section)} style={{ background: "none", border: `1px solid ${C.spineFaint}`, borderRadius: 3, color: C.inkMuted, padding: "0.16rem 0.42rem", fontSize: "0.62rem", fontFamily: C.fontSans, cursor: "pointer" }}>✎</button>
@@ -577,7 +577,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
   const cellBorder = `1px solid ${C.accent}`;
 
   return (
-    <div style={{ border, borderRadius: 3, border: `1px solid ${C.spineFaint}`, overflow: "hidden", background: "C.paper", display: "flex", flexDirection: "column", flex: flex || "none" }}>
+    <div style={{ border, borderRadius: 3, border: "3D2460", overflow: "hidden", background: "C.paper", display: "flex", flexDirection: "column", flex: flex || "none" }}>
       <div style={{ background: "#DDD0EC", borderBottom: border, padding: "0.32rem 0.6rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.72rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "left", textTransform: "uppercase" }}>
         {title}
       </div>
@@ -585,7 +585,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
         <div style={{ padding: "0.4rem 0.6rem", display: "flex", flexDirection: "column", gap: "0.3rem", background: "#FAF4FC", flex: 1 }}>
           {Array.from({ length: rows }).map((_, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, rowHeight:10, flexShrink: 0 }}>〜</span>
+              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, rowHeight:8, flexShrink: 0 }}>〜</span>
               <input value={cells[i] || ""} onChange={e => update(i, e.target.value)}
                 style={{ flex: 1, background: "transparent", border: "none", borderBottom: cellBorder, outline: "none", fontFamily: C.fontSans, fontSize: "0.82rem", color: C.inkMid, padding: "0.18rem 0" }} />
               <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
