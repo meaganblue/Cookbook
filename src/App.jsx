@@ -682,7 +682,8 @@ export default function Cookbook() {
   if (!authUser) return <AuthPage onAuth={setAuthUser} />;
 
   // ── sidebar tab definitions (fixed + dynamic recipe sections)
-  const FIXED_TABS = ["DASHBOARD", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "CANNING & SLOW COOKER", "VEGGIES", "PASTA", "RICE", "MEATS"];
+  const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "CANNING", "SLOW COOKER", "VEGGIES", "PASTA", "RICE", "MEATS"];
+
 
 
   // When navigating to a recipe/section, auto-switch to RECIPES tab
@@ -719,7 +720,11 @@ export default function Cookbook() {
           <div style={{ width: 0, flexShrink: 0, background: C.paper, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0.75rem", gap: "1.4rem" }}>
             {Array.from({ length: 9 }).map((_, i) => (
               <div key={i} style={{ width: 0, height: 0, borderRadius: "50%", background: C.spineFaint, boxShadow: "inset 0 1px 3px rgba(0,0,0,0.25)", flexShrink: 0 }} />
-            ))}
+                      
+
+
+
+    ))}
           </div>
 
           {/* ── PAGE CONTENT ── */}
