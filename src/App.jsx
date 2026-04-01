@@ -325,6 +325,9 @@ function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onC
 // ─────────────────────────────────────────────
 // RECIPE PAGE
 // ─────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// RECIPE PAGE
+// ─────────────────────────────────────────────
 function RecipePage({ recipe, sectionName, onEdit, onBack }) {
   return (
     <div style={{ flex: 1, overflowY: "auto", padding: "0.75rem 1rem 3rem" }}>
@@ -359,9 +362,33 @@ function RecipePage({ recipe, sectionName, onEdit, onBack }) {
                   <div key={i} style={{ fontSize: "0.85rem", fontFamily: C.fontSans, color: C.inkMid, padding: "0.1rem 0", display: "flex", gap: "0.35rem" }}>
                     <span style={{ color: C.accent, flexShrink: 0 }}>—</span><span>{ing}</span>
                   </div>
-                ))};{
+                ))}
+              </div>
+            </div>
+          )}
+          {recipe.method?.length > 0 && (
+            <div>
+              <div style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.1em", color: C.inkMuted, marginBottom: "0.4rem" }}>Instructions</div>
+              {recipe.method.map((step, i) => (
+                <div key={i} style={{ fontSize: "0.9rem", fontFamily: C.fontSans, color: C.inkMid, marginBottom: "0.8rem", lineHeight: 1.5 }}>
+                   <span style={{ fontWeight: "bold", color: C.accent, marginRight: "0.5rem" }}>{i + 1}.</span> {step}
+                </div>
+              ))}
+            </div>
+          )}
+          {recipe.notes && (
+            <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: `1px solid ${C.line}`, fontSize: "0.82rem", color: C.inkMuted, fontStyle: "italic" }}>
+              <strong>Notes:</strong> {recipe.notes}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─────────────────────────────────────────────
-// SECTION TABLE (main binder view)
+// SECTION TABLE
 // ─────────────────────────────────────────────
 function SectionTable({ section, recipes, onSectionClick, onEditSection, onDeleteSection, onAddRecipe }) {
   const recs = recipes.filter(r => r.section_id === section.id);
@@ -397,7 +424,31 @@ function SectionTable({ section, recipes, onSectionClick, onEditSection, onDelet
         </div>
       )}
     </div>
-  );{
+  );
+}
+
+// ─────────────────────────────────────────────
+// EDIT SECTION NAME MODAL
+// ─────────────────────────────────────────────
+function EditSectionModal({ section, onSave, onClose }) {
+  const [name, setName] = useState(section.name);
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(26,18,8,0.5)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
+      <div style={{ background: C.pageInner, border: `1px solid ${C.spineFaint}`, borderRadius: 4, padding: "1.2rem", width: "100%", maxWidth: 320, boxShadow: "0 8px 24px rgba(0,0,0,0.2)" }}>
+        <div style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.88rem", color: C.ink, marginBottom: "0.75rem" }}>Rename Section</div>
+        <input value={name} onChange={e => setName(e.target.value)} onKeyDown={e => { if (e.key === "Enter") onSave(name); if (e.key === "Escape") onClose(); }} autoFocus
+          style={{ width: "100%", background: C.card, border: `1px solid ${C.spineFaint}`, borderRadius: 3, color: C.ink, padding: "0.45rem 0.7rem", fontSize: "0.92rem", fontFamily: C.fontSans, outline: "none", boxSizing: "border-box", marginBottom: "0.75rem" }} />
+        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+          <button onClick={onClose} style={{ background: "transparent", border: `1px solid ${C.spineFaint}`, borderRadius: 3, color: C.inkMuted, padding: "0.32rem 0.85rem", fontSize: "0.8rem", fontFamily: C.fontSans, cursor: "pointer" }}>Cancel</button>
+          <button onClick={() => onSave(name)} disabled={!name.trim()} style={{ background: C.accent, border: "none", borderRadius: 3, color: "#fff", padding: "0.32rem 0.85rem", fontSize: "0.8rem", fontFamily: C.fontSans, fontWeight: "bold", cursor: "pointer" }}>Save</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// (The rest of your file starts with export default function Cookbook() below)
+
 
 // ─────────────────────────────────────────────
 // EDIT SECTION NAME MODAL
