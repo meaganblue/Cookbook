@@ -860,6 +860,12 @@ export default function Cookbook() {
                   onMouseEnter={e => { if (!active) e.currentTarget.style.background = "#6B4535"; }}
                   onMouseLeave={e => { if (!active) e.currentTarget.style.background = "#5A3828"; }}
                 >
+
+
+<div class="sideways-2lines">
+  First Line<br>Second Line
+</div>
+
                   <span style={{
                     writingMode: "vertical-rl",
                     transform: "rotate(180deg)",
@@ -872,7 +878,8 @@ export default function Cookbook() {
                     color: active ? C.accent : "rgba(240,225,200,0.75)",
                     whiteSpace: "wrap",
                     lineHeight: 1,
-                  
+  height: 35px;
+                
                   }}>{tab}</span>
                 </button>
               );
