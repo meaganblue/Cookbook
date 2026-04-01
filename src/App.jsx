@@ -807,7 +807,13 @@ export default CookbookPage;
           onClose={() => setRecipeModal(null)}
         />
       )}
-      {editSecModal && <EditSectionModal section={editSecModal} onSave={renameSection} onClose={() => setEditSecModal(null)} />}
+      {editSectionModal && (
+        <EditSectionModal 
+          section={editSecModal} 
+          onSave={renameSection} 
+          onClose={() => setEditSecModal(null)} 
+        />
+      )}
     </div>
-  );
-              }
+  ); // Removed extra }; and }
+}
