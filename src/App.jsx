@@ -864,7 +864,7 @@ export default function Cookbook() {
 
 <div class="sideways-2lines">
   First Line<br>Second Line
-</div>
+
 
                   <span style={{
                     writingMode: "vertical-rl",
@@ -878,7 +878,7 @@ export default function Cookbook() {
                     color: active ? C.accent : "rgba(240,225,200,0.75)",
                     whiteSpace: "wrap",
                     lineHeight: 1,
-  height: 35px;
+  height: 35;
                 
                   }}>{tab}</span>
                 </button>
