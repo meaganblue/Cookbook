@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import { supabase } from "./supabase";
 
@@ -6,24 +5,24 @@ import { supabase } from "./supabase";
 // DESIGN TOKENS
 // ─────────────────────────────────────────────
 const C = {
-  paper:       "#F5F0E8",
-  pageInner:   "#FDFAF4",
-  card:        "#FFFEF9",
-  line:        "#E2D9C8",
-  tabActive:   "#EDE8F5",
-  tabInactive: "#D4C9B4",
-  tabHover:    "#E0D5C0",
-  spine:       "#EDE8F5",
+  paper:       "#F5F2FB",   // very pale lavender — page background
+  pageInner:   "#FAF8FE",   // slightly lighter for content areas
+  card:        "#FFFFFF",
+  line:        "#CCC3E0",   // muted purple for ruled lines
+  tabActive:   "#FAF8FE",
+  tabInactive: "#BDB0D8",
+  tabHover:    "#D0C6EC",
+  spine:       "#3D2460",   // deep purple — binder spine
   spineLight:  "#7B5AAF",
   spineFaint:  "#5C3D8F",
-  accent:      "#5C3D8F",
+  accent:      "#5C3D8F",   // primary purple
   accentLight: "#7B5AAF",
   accentFade:  "#EDE8F5",
-  ink:         "#1A1208",
-  inkMid:      "#3D2E1A",
-  inkMuted:    "#EDE8F5",
-  inkFaint:    "#7B5AAF",
-  red:         "#5C3D8F",
+  ink:         "#1A0A2E",   // near-black purple-tinted
+  inkMid:      "#3D2460",
+  inkMuted:    "#7B5AAF",
+  inkFaint:    "#9E87C8",
+  red:         "#8B2E2E",
   star:        "#B8860A",
   font:        "'Crimson Text', 'Book Antiqua', Georgia, serif",
   fontSans:    "'Trebuchet MS', 'Gill Sans', Calibri, sans-serif",
@@ -120,7 +119,7 @@ function AuthPage({ onAuth }) {
           <div style={{ textAlign: "center", marginBottom: "1.8rem" }}>
             <div style={{ fontSize: "2.5rem", color: C.spineFaint, marginBottom: "0.4rem" }}>★</div>
             <div style={{ fontSize: "1.5rem", fontFamily: C.font, color: C.paper, fontWeight: "bold", letterSpacing: "0.05em" }}>My Cookbook</div>
-            <div style={{ fontSize: "0.7rem", color: C.spineFaint, fontFamily: C.fontSans, letterSpacing: "0.15em", textTransform: "uppercase", marginTop: "0.3rem" }}>
+            <div style={{ fontSize: "0.7rem", color: "#C9B8FF", fontFamily: C.fontSans, letterSpacing: "0.15em", textTransform: "uppercase", marginTop: "0.3rem" }}>
               {mode === "login" ? "Welcome back" : "Create your cookbook"}
             </div>
           </div>
@@ -135,7 +134,7 @@ function AuthPage({ onAuth }) {
               {mode === "login" ? "New here? Create an account" : "Already have one? Log in"}
             </button>
           </div>
-          <div style={{ color: C.inkFaint, fontSize: "0.62rem", textAlign: "center", marginTop: "1.2rem", fontFamily: C.fontSans }}>No email required</div>
+          <div style={{ color: "#C9B8FF", fontSize: "0.62rem", textAlign: "center", marginTop: "1.2rem", fontFamily: C.fontSans }}>No email required</div>
         </div>
       </div>
     </div>
@@ -266,7 +265,7 @@ function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onC
               {/* Right: Section pill */}
               <div style={{ flexShrink: 0, position: "relative" }}>
                 <button onClick={() => setShowSecPicker(p => !p)}
-                  style={{ background: C.accent, border: "none", borderRadius: 6, color: "#fff", padding: "0.3rem 0.5rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer", textAlign: "center", minWidth: 68, lineHeight: 1, whiteSpace: "pre-line" }}>
+                  style={{ background: C.accent, border: "none", borderRadius: 10, color: "#fff", padding: "0.5rem 0.9rem", fontSize: "0.85rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer", textAlign: "center", minWidth: 88, lineHeight: 1.4, whiteSpace: "pre-line" }}>
                   {selectedSection ? selectedSection.name : "Section\nchoice"}
                 </button>
                 {showSecPicker && (
@@ -444,7 +443,7 @@ function SectionTable({ section, recipes, onSectionClick, onEditSection, onDelet
       <div style={{ background: C.paper, borderBottom: `1px solid ${C.line}`, padding: "0.48rem 0.75rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
         <button onClick={() => onSectionClick(section)} style={{ flex: 1, background: "none", border: "none", cursor: "pointer", textAlign: "left", padding: 0 }}>
           <span style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.85rem", color: C.ink }}>{section.name}</span>
-          <span style={{ fontFamily: C.fontSans, fontSize: "0.68rem", color: "3D2460", marginLeft: "0.4rem" }}>({recs.length})</span>
+          <span style={{ fontFamily: C.fontSans, fontSize: "0.68rem", color: C.inkMuted, marginLeft: "0.4rem" }}>({recs.length})</span>
         </button>
         <button onClick={() => onAddRecipe(section.id)} style={{ background: C.accentFade, border: `1px solid ${C.accent}`, borderRadius: 3, color: C.accent, padding: "0.16rem 0.45rem", fontSize: "0.62rem", fontFamily: C.fontSans, cursor: "pointer", fontWeight: "bold" }}>+ Recipe</button>
         <button onClick={() => onEditSection(section)} style={{ background: "none", border: `1px solid ${C.spineFaint}`, borderRadius: 3, color: C.inkMuted, padding: "0.16rem 0.42rem", fontSize: "0.62rem", fontFamily: C.fontSans, cursor: "pointer" }}>✎</button>
@@ -577,7 +576,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
   const cellBorder = `1px solid ${C.accent}`;
 
   return (
-    <div style={{ border, borderRadius: 3, border: "3D2460", overflow: "hidden", background: "C.paper", display: "flex", flexDirection: "column", flex: flex || "none" }}>
+    <div style={{ border, borderRadius: 6, overflow: "hidden", background: "#EDE0F5", display: "flex", flexDirection: "column", flex: flex || "none" }}>
       <div style={{ background: "#DDD0EC", borderBottom: border, padding: "0.32rem 0.6rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.72rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "left", textTransform: "uppercase" }}>
         {title}
       </div>
@@ -585,7 +584,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
         <div style={{ padding: "0.4rem 0.6rem", display: "flex", flexDirection: "column", gap: "0.3rem", background: "#FAF4FC", flex: 1 }}>
           {Array.from({ length: rows }).map((_, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, rowHeight:8, flexShrink: 0 }}>〜</span>
+              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
               <input value={cells[i] || ""} onChange={e => update(i, e.target.value)}
                 style={{ flex: 1, background: "transparent", border: "none", borderBottom: cellBorder, outline: "none", fontFamily: C.fontSans, fontSize: "0.82rem", color: C.inkMid, padding: "0.18rem 0" }} />
               <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
@@ -596,7 +595,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
         <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, background: "#FAF4FC", flex: 1 }}>
           {Array.from({ length: cols * rows }).map((_, i) => (
             <input key={i} value={cells[i] || ""} onChange={e => update(i, e.target.value)}
-              style={{ background: "transparent", border: "none", borderRight: (i % cols) < (cols - 1) ? cellBorder : "none", borderBottom: i < cols * (rows - 1) ? cellBorder : "none", outline: "none", fontFamily: C.fontSans, fontSize: "0.8rem", color: C.inkMid, padding: "0.28rem 0.4rem", width: "100%", boxSizing: "border-box", minHeight: 16 }} />
+              style={{ background: "transparent", border: "none", borderRight: (i % cols) < (cols - 1) ? cellBorder : "none", borderBottom: i < cols * (rows - 1) ? cellBorder : "none", outline: "none", fontFamily: C.fontSans, fontSize: "0.8rem", color: C.inkMid, padding: "0.28rem 0.4rem", width: "100%", boxSizing: "border-box", minHeight: 26 }} />
           ))}
         </div>
       )}
@@ -617,7 +616,6 @@ export default function Cookbook() {
   const [editSecModal, setEditSecModal] = useState(null);
   const [addSecName, setAddSecName] = useState("");
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState("DASHBOARD");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setAuthUser(session?.user || null));
@@ -682,32 +680,28 @@ export default function Cookbook() {
   if (!authUser) return <AuthPage onAuth={setAuthUser} />;
 
   // ── sidebar tab definitions (fixed + dynamic recipe sections)
-  const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "CANNING", "SLOW COOKER", "VEGGIES", "PASTA", "RICE", "MEATS"];
-
-
+  const FIXED_TABS = ["DASHBOARD", "RECIPES", "CONVERSIONS", "TIPS", "KITCHEN NOTES", "PLANNER"];
+  const [activeTab, setActiveTab] = useState("DASHBOARD");
 
   // When navigating to a recipe/section, auto-switch to RECIPES tab
-  const goNav = (navVal) => { 
-  setNav(navVal); 
-  setActiveTab("RECIPES"); 
-};
+  const goNav = (navVal) => { setNav(navVal); if (navVal) setActiveTab("RECIPES"); else setActiveTab("DASHBOARD"); };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#8B6B58", display: "flex", flexDirection: "column", fontFamily: C.fontSans, padding: "0.5rem" }}>
+    <div style={{ minHeight: "100vh", background: "#2A1545", display: "flex", flexDirection: "column", fontFamily: C.fontSans, padding: "0.5rem" }}>
 
       {/* ── OUTER BINDER SHELL ── */}
-      <div style={{ flex: 1, background: C.paper, borderRadius: 8, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.4)", display: "flex", flexDirection: "column", border: `2px solid ${C.spine}` }}>
+      <div style={{ flex: 1, background: C.paper, borderRadius: 8, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3)", display: "flex", flexDirection: "column", border: `2px solid ${C.spineFaint}` }}>
 
         {/* ── TOP BAR ── */}
-        <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.6rem 0.65rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+        <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.6rem 0.85rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <span style={{ fontFamily: C.font, fontSize: "1.15rem", fontWeight: "bold", color: C.ink }}>Meagan's Cookbook</span>
           <div style={{ display: "flex", gap: "0.4rem" }}>
             <button onClick={handleLogout}
-              style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
+              style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
               Log Out
             </button>
             <button onClick={handlePrint}
-              style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
+              style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
               Print Book
             </button>
           </div>
@@ -717,14 +711,10 @@ export default function Cookbook() {
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
 
           {/* Left binder spine with hole punches */}
-          <div style={{ width: 0, flexShrink: 0, background: C.paper, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0.75rem", gap: "1.4rem" }}>
+          <div style={{ width: 22, flexShrink: 0, background: C.spine, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0.75rem", gap: "1.4rem" }}>
             {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} style={{ width: 0, height: 0, borderRadius: "50%", background: C.spineFaint, boxShadow: "inset 0 1px 3px rgba(0,0,0,0.25)", flexShrink: 0 }} />
-                      
-
-
-
-    ))}
+              <div key={i} style={{ width: 13, height: 13, borderRadius: "50%", background: C.spineFaint, border: `1.5px solid ${C.spineLight}`, boxShadow: "inset 0 1px 3px rgba(0,0,0,0.25)", flexShrink: 0 }} />
+            ))}
           </div>
 
           {/* ── PAGE CONTENT ── */}
@@ -788,7 +778,7 @@ export default function Cookbook() {
 
             {/* DASHBOARD VIEW — matches mockup */}
             {activeTab === "DASHBOARD" && !nav?.recipe && !nav?.section && (
-              <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.6rem", height: "97%", boxSizing: "border-box" }}>
+              <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.6rem", height: "100%", boxSizing: "border-box" }}>
 
                 {/* ── TABLE 1: Measurement Equivalents — 3 columns ── */}
                 <DashboardTable
@@ -819,7 +809,7 @@ export default function Cookbook() {
                   title="KITCHEN NOTES"
                   titleCenter
                   isNotes
-                  rows={10}
+                  rows={6}
                 />
               </div>
             )}
@@ -827,7 +817,7 @@ export default function Cookbook() {
             {/* PLACEHOLDER TABS */}
             {["CONVERSIONS","TIPS","KITCHEN NOTES","PLANNER"].includes(activeTab) && (
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", flexDirection: "column", gap: "0.5rem", color: C.inkFaint, fontFamily: C.font }}>
-                <div style={{ fontSize: "1.8 rem" }}>📄</div>
+                <div style={{ fontSize: "1.8rem" }}>📄</div>
                 <div style={{ fontSize: "0.9rem", fontStyle: "italic" }}>{activeTab}</div>
                 <div style={{ fontSize: "0.75rem" }}>Coming soon</div>
               </div>
@@ -840,10 +830,10 @@ export default function Cookbook() {
               const active = activeTab === tab;
               return (
                 <button key={tab}
-                  onClick={() => { setActiveTab(tab); if (tab === "RECIPES") { /* stay */ } else { setNav(null); } }}
+                  onClick={() => { setActiveTab(tab); setNav(null); }}
                   style={{
                     flex: 1,
-                    background: active ? C.pageInner : "#5A3828",
+                    background: active ? C.pageInner : "#4A2A6A",
                     border: "none",
                     borderRadius: "0 6px 6px 0",
                     borderLeft: active ? `3px solid ${C.accent}` : "3px solid transparent",
@@ -851,36 +841,26 @@ export default function Cookbook() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    height: "30",
                     padding: "0.2rem 0",
                     boxShadow: active ? "2px 0 8px rgba(0,0,0,0.2)" : "none",
                     transition: "all 0.12s",
-                  
+                    overflow: "hidden",
                   }}
-                  onMouseEnter={e => { if (!active) e.currentTarget.style.background = "#6B4535"; }}
-                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = "#5A3828"; }}
+                  onMouseEnter={e => { if (!active) e.currentTarget.style.background = "#5C3A80"; }}
+                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = "#4A2A6A"; }}
                 >
-
-
-<div class="sideways-2lines">
-  First Line<br>Second Line
-
-
                   <span style={{
                     writingMode: "vertical-rl",
                     transform: "rotate(180deg)",
-                    fontSize: "0.5rem",
+                    fontSize: "0.48rem",
                     fontFamily: C.fontSans,
                     fontWeight: "700",
-                    letterSpacing: "0.12em",
-                      rows: "2",
+                    letterSpacing: "0.1em",
                     textTransform: "uppercase",
-                    color: active ? C.accent : "rgba(240,225,200,0.75)",
-                    whiteSpace: "wrap",
+                    color: active ? C.accent : "rgba(220,205,255,0.85)",
+                    whiteSpace: "nowrap",
                     lineHeight: 1,
-  height: 35}
-                
-                  }>{tab}</span>
+                  }}>{tab}</span>
                 </button>
               );
             })}
@@ -888,25 +868,25 @@ export default function Cookbook() {
             {/* Add New Section button at bottom */}
             <div style={{ marginTop: "auto", paddingTop: "0.3rem", display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
               <button onClick={() => { const name = prompt("New section name:"); if (name?.trim()) { const s = { id: `sec-${Date.now()}`, user_id: authUser.id, name: name.trim(), position: sections.length }; dbUpsertSection(s).then(saved => setSections(prev => [...prev, saved || s])); } }}
-                style={{ width: 28, height: 28, borderRadius: "50%", background: C.spineFaint, border: `2px solid ${C.spineLight}`, color: C.spine, fontSize: "1rem", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>+</button>
-              <span style={{ fontSize: "0.38rem", color: "rgba(240,225,200,0.6)", fontFamily: C.fontSans, textTransform: "uppercase", letterSpacing: "0.08em", textAlign: "center", lineHeight: 1.3 }}>Add{"\n"}New{"\n"}Section</span>
+                style={{ width: 26, height: 26, borderRadius: "50%", background: C.accentFade, border: `2px solid ${C.accentLight}`, color: C.accent, fontSize: "1rem", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>+</button>
+              <span style={{ fontSize: "0.38rem", color: "rgba(220,205,255,0.7)", fontFamily: C.fontSans, textTransform: "uppercase", letterSpacing: "0.06em", textAlign: "center", lineHeight: 1.3 }}>{"Add\nNew\nSection"}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* FLOATING RECIPE/SECTION BUTTONS — only on recipes tab */}
-      {activeTab === "RECIPES" && !nav?.recipe && !nav?.section && (
+      {/* FLOATING RECIPE/SECTION BUTTONS */}
+      {!nav?.recipe && !nav?.section && (activeTab === "RECIPES" || activeTab === "DASHBOARD") && (
         <div style={{ position: "fixed", bottom: "1.2rem", right: "3rem", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.5rem", zIndex: 50 }}>
-          <button onClick={() => setRecipeModal({})} disabled={sections.length === 0}
-            style={{ background: C.accent, border: "none", borderRadius: 22, color: "#fff", padding: "0.55rem 1.1rem", fontSize: "0.82rem", fontFamily: C.fontSans, fontWeight: "700", cursor: sections.length === 0 ? "not-allowed" : "pointer", opacity: sections.length === 0 ? 0.5 : 1, boxShadow: "0 3px 12px rgba(92,61,143,0.4)" }}>
+          <button onClick={() => { setActiveTab("RECIPES"); setRecipeModal({}); }} disabled={sections.length === 0}
+            style={{ background: C.accent, border: "none", borderRadius: 22, color: "#fff", padding: "0.55rem 1.1rem", fontSize: "0.82rem", fontFamily: C.fontSans, fontWeight: "700", cursor: sections.length === 0 ? "not-allowed" : "pointer", opacity: sections.length === 0 ? 0.5 : 1, boxShadow: "0 3px 12px rgba(92,61,143,0.5)" }}>
             + Add Recipe
           </button>
-          <div style={{ display: "flex", gap: "0.35rem", alignItems: "center", background: C.pageInner, border: `1px solid ${C.spineFaint}`, borderRadius: 22, padding: "0.38rem 0.5rem 0.38rem 0.85rem", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+          <div style={{ display: "flex", gap: "0.35rem", alignItems: "center", background: C.pageInner, border: `1px solid ${C.spineFaint}`, borderRadius: 22, padding: "0.38rem 0.5rem 0.38rem 0.85rem", boxShadow: "0 2px 8px rgba(92,61,143,0.2)" }}>
             <input value={addSecName} onChange={e => setAddSecName(e.target.value)} onKeyDown={e => e.key === "Enter" && addSection()} placeholder="New section…"
               style={{ background: "transparent", border: "none", outline: "none", color: C.ink, fontSize: "0.78rem", fontFamily: C.fontSans, width: 110 }} />
             <button onClick={addSection} disabled={!addSecName.trim()}
-              style={{ background: C.spineLight, border: "none", borderRadius: 18, color: C.paper, padding: "0.28rem 0.65rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "bold", cursor: addSecName.trim() ? "pointer" : "not-allowed", opacity: addSecName.trim() ? 1 : 0.5 }}>
+              style={{ background: C.accent, border: "none", borderRadius: 18, color: "#fff", padding: "0.28rem 0.65rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "bold", cursor: addSecName.trim() ? "pointer" : "not-allowed", opacity: addSecName.trim() ? 1 : 0.5 }}>
               + Section
             </button>
           </div>
@@ -927,4 +907,4 @@ export default function Cookbook() {
       {editSecModal && <EditSectionModal section={editSecModal} onSave={renameSection} onClose={() => setEditSecModal(null)} />}
     </div>
   );
-              }
+}
