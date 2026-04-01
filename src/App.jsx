@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState, useEffect } from "react";
 import { supabase } from "./supabase";
 
@@ -143,10 +142,46 @@ function AuthPage({ onAuth }) {
 }
 
 // ─────────────────────────────────────────────
-// RECIPE MODAL
+// INGREDIENT GRID — two-column dash layout
+// ─────────────────────────────────────────────
+function IngredientGrid({ value, onChange, fieldStyle }) {
+  const lines = value.split("\n");
+  const slots = Math.max(8, lines.length % 2 === 0 ? lines.length + 2 : lines.length + 1);
+  const padded = [...lines, ...Array(slots).fill("")].slice(0, slots);
+
+  const update = (i, val) => {
+    const next = [...padded];
+    next[i] = val;
+    let last = next.length - 1;
+    while (last > 7 && !next[last].trim()) last--;
+    onChange(next.slice(0, last + 1).join("\n"));
+  };
+
+  const pairs = [];
+  for (let i = 0; i < padded.length; i += 2) pairs.push([i, i + 1]);
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.2rem 1.2rem" }}>
+      {pairs.map(([li, ri]) => (
+        <React.Fragment key={li}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "0.3rem" }}>
+            <span style={{ color: C.accent, fontWeight: "bold", fontSize: "0.9rem", flexShrink: 0 }}>–</span>
+            <input value={padded[li] || ""} onChange={e => update(li, e.target.value)} style={{ ...fieldStyle, flex: 1 }} />
+          </div>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "0.3rem" }}>
+            <span style={{ color: C.accent, fontWeight: "bold", fontSize: "0.9rem", flexShrink: 0 }}>–</span>
+            <input value={padded[ri] || ""} onChange={e => update(ri, e.target.value)} style={{ ...fieldStyle, flex: 1 }} />
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// RECIPE MODAL  — styled to match mockup
 // ─────────────────────────────────────────────
 function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onClose }) {
-  const isNew = !recipe?.id;
   const [title, setTitle]   = useState(recipe?.title || "");
   const [secId, setSecId]   = useState(recipe?.section_id || defaultSectionId || sections[0]?.id || "");
   const [ings, setIngs]     = useState((recipe?.ingredients || []).join("\n"));
@@ -158,87 +193,135 @@ function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onC
   const [notes, setNotes]   = useState(recipe?.notes || "");
   const [rating, setRating] = useState(recipe?.rating || 0);
   const [busy, setBusy]     = useState(false);
+  const [showSecPicker, setShowSecPicker] = useState(false);
 
   const save = async () => {
     if (!title.trim()) return;
     setBusy(true);
     await onSave({
       id: recipe?.id || `rec-${Date.now()}`,
-      created_at: recipe?.created_at, // Preserves the original creation date
-      title: title.trim(), 
-      section_id: secId,
+      created_at: recipe?.created_at,
+      title: title.trim(), section_id: secId,
       ingredients: ings.split("\n").map(s => s.trim()).filter(Boolean),
       method: method.split("\n").map(s => s.trim()).filter(Boolean),
-      temp: temp.trim(), 
-      cook_time: time.trim(), 
-      servings: serves.trim(),
-      source: source.trim(), 
-      notes: notes.trim(), 
-      rating,
+      temp: temp.trim(), cook_time: time.trim(), servings: serves.trim(),
+      source: source.trim(), notes: notes.trim(), rating,
     });
     setBusy(false);
   };
 
-  const inp = { width: "100%", background: C.pageInner, border: `1px solid ${C.spineFaint}`, borderRadius: 2, color: C.ink, padding: "0.32rem 0.55rem", fontSize: "0.88rem", fontFamily: C.fontSans, outline: "none", boxSizing: "border-box" };
-  const lbl = { fontSize: "0.68rem", fontFamily: C.fontSans, color: C.inkMuted, display: "block", marginBottom: "0.22rem", fontWeight: "600", letterSpacing: "0.04em" };
-  const ta  = { ...inp, resize: "vertical", lineHeight: 1.6 };
+  // Underline-only fields — matches mockup aesthetic
+  const uLine = {
+    background: "transparent", border: "none",
+    borderBottom: `1.5px solid ${C.inkMid}`,
+    borderRadius: 0, color: C.ink,
+    padding: "0.15rem 0.1rem", fontSize: "0.92rem",
+    fontFamily: C.fontSans, outline: "none",
+    width: "100%", boxSizing: "border-box",
+  };
+  const uTA = { ...uLine, resize: "none", lineHeight: 1.8, display: "block" };
+  const rowLbl = { fontSize: "0.95rem", fontFamily: C.fontSans, color: C.ink, whiteSpace: "nowrap", flexShrink: 0, lineHeight: 1.5 };
+  const selectedSection = sections.find(s => s.id === secId);
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(26,18,8,0.6)", zIndex: 200, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "1rem", overflowY: "auto" }}>
-      <div style={{ background: C.pageInner, border: `1px solid ${C.spineFaint}`, borderRadius: 4, width: "100%", maxWidth: 480, margin: "auto", boxShadow: "0 12px 40px rgba(0,0,0,0.3)", ...ruled }}>
-        <div style={{ background: C.paper, borderBottom: `1px solid ${C.line}`, padding: "0.85rem 1.1rem", display: "flex", alignItems: "center", justifyContent: "space-between", borderRadius: "4px 4px 0 0" }}>
-          <div style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.95rem", color: C.ink }}>{isNew ? "New Recipe" : "Edit Recipe"}</div>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(26,18,8,0.55)", zIndex: 200, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "0.75rem", overflowY: "auto" }}>
+      <div style={{ background: C.pageInner, border: `1.5px solid ${C.inkMid}`, borderRadius: 6, width: "100%", maxWidth: 440, margin: "auto", boxShadow: "0 12px 40px rgba(0,0,0,0.28)", overflow: "hidden", ...ruled }}>
+
+        {/* Header */}
+        <div style={{ background: C.paper, borderBottom: `1px solid ${C.line}`, padding: "0.7rem 1.1rem 0.6rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <span style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "1.05rem", color: C.ink }}>Recipe Input Popup</span>
           <button onClick={onClose} style={{ background: "none", border: "none", color: C.inkMuted, fontSize: "1.3rem", cursor: "pointer", lineHeight: 1 }}>×</button>
         </div>
-        <div style={{ padding: "1rem 1.1rem 1.2rem", display: "flex", flexDirection: "column", gap: "0.8rem" }}>
+
+        <div style={{ padding: "0.9rem 1.1rem 1.1rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+
+          {/* Name */}
+          <div style={{ display: "flex", alignItems: "baseline", gap: "0.4rem" }}>
+            <span style={rowLbl}>Name:</span>
+            <input value={title} onChange={e => setTitle(e.target.value)} style={{ ...uLine, fontSize: "1rem" }} />
+          </div>
+
+          {/* Ingredients two-col dash grid */}
           <div>
-            <label style={lbl}>Name:</label>
-            <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Recipe name…" style={{ ...inp, fontSize: "1rem", fontWeight: "bold" }} />
+            <div style={{ ...rowLbl, marginBottom: "0.35rem" }}>Ingredients:</div>
+            <IngredientGrid value={ings} onChange={setIngs} fieldStyle={uLine} />
           </div>
-          <div>
-            <label style={lbl}>Section:</label>
-            <select value={secId} onChange={e => setSecId(e.target.value)} style={inp}>
-              {sections.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-            </select>
+
+          {/* Recipe Info box */}
+          <div style={{ border: `1.5px solid ${C.inkMid}`, borderRadius: 4, padding: "0.65rem 0.85rem 0.75rem", background: "transparent" }}>
+            <div style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "1rem", color: C.ink, marginBottom: "0.6rem" }}>Recipe Info</div>
+
+            <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
+              {/* Left: Temp / Time / Serves */}
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.3rem" }}>
+                {[["Temp:", temp, setTemp], ["Time:", time, setTime], ["Serves:", serves, setServes]].map(([lbl, val, set]) => (
+                  <div key={lbl} style={{ display: "flex", alignItems: "baseline", gap: "0.35rem" }}>
+                    <span style={{ ...rowLbl, minWidth: 52 }}>{lbl}</span>
+                    <input value={val} onChange={e => set(e.target.value)} style={uLine} />
+                  </div>
+                ))}
+              </div>
+
+              {/* Right: Section pill */}
+              <div style={{ flexShrink: 0, position: "relative" }}>
+                <button onClick={() => setShowSecPicker(p => !p)}
+                  style={{ background: C.accent, border: "none", borderRadius: 10, color: "#fff", padding: "0.5rem 0.9rem", fontSize: "0.85rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer", textAlign: "center", minWidth: 88, lineHeight: 1.4, whiteSpace: "pre-line" }}>
+                  {selectedSection ? selectedSection.name : "Section\nchoice"}
+                </button>
+                {showSecPicker && (
+                  <div style={{ position: "absolute", right: 0, top: "calc(100% + 4px)", background: C.card, border: `1px solid ${C.spineFaint}`, borderRadius: 6, zIndex: 10, minWidth: 150, boxShadow: "0 4px 16px rgba(0,0,0,0.15)", overflow: "hidden" }}>
+                    {sections.map(s => (
+                      <button key={s.id} onClick={() => { setSecId(s.id); setShowSecPicker(false); }}
+                        style={{ width: "100%", background: s.id === secId ? C.accentFade : "transparent", border: "none", padding: "0.45rem 0.75rem", textAlign: "left", cursor: "pointer", fontFamily: C.fontSans, fontSize: "0.88rem", color: s.id === secId ? C.accent : C.ink, fontWeight: s.id === secId ? "700" : "400" }}
+                        onMouseEnter={e => { if (s.id !== secId) e.currentTarget.style.background = C.accentFade; }}
+                        onMouseLeave={e => { if (s.id !== secId) e.currentTarget.style.background = "transparent"; }}>
+                        {s.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Instructions */}
+            <div style={{ marginTop: "0.4rem", display: "flex", alignItems: "flex-start", gap: "0.35rem" }}>
+              <span style={{ ...rowLbl, paddingTop: "0.1rem", minWidth: 90 }}>Instructions:</span>
+              <textarea value={method} onChange={e => setMethod(e.target.value)} rows={3} style={{ ...uTA, flex: 1 }} />
+            </div>
+
+            {/* Notes */}
+            <div style={{ marginTop: "0.35rem", display: "flex", alignItems: "baseline", gap: "0.35rem" }}>
+              <span style={{ ...rowLbl, minWidth: 52 }}>Notes:</span>
+              <input value={notes} onChange={e => setNotes(e.target.value)} style={uLine} />
+            </div>
+
+            {/* Source */}
+            <div style={{ marginTop: "0.35rem", display: "flex", alignItems: "baseline", gap: "0.35rem" }}>
+              <span style={{ ...rowLbl, minWidth: 52 }}>Source:</span>
+              <input value={source} onChange={e => setSource(e.target.value)} style={uLine} />
+            </div>
+
+            {/* Rating */}
+            <div style={{ marginTop: "0.45rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span style={rowLbl}>Rating:</span>
+              <Stars value={rating} onChange={setRating} size="1.1rem" />
+            </div>
           </div>
-          <div>
-            <label style={lbl}>Ingredients: <span style={{ fontWeight: "400", color: C.inkFaint }}>(one per line)</span></label>
-            <textarea value={ings} onChange={e => setIngs(e.target.value)} placeholder={"2 cups flour\n1 tsp baking powder\n½ cup butter, softened"} style={{ ...ta, minHeight: 90 }} />
-          </div>
-          <div style={{ border: `1px solid ${C.spineFaint}`, borderRadius: 3, padding: "0.75rem", background: C.card }}>
-            <div style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.82rem", color: C.inkMid, marginBottom: "0.6rem" }}>Recipe Info</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.55rem 0.75rem" }}>
-              <div><label style={lbl}>Temp:</label><input value={temp} onChange={e => setTemp(e.target.value)} placeholder="e.g. 180°C" style={inp} /></div>
-              <div><label style={lbl}>Time:</label><input value={time} onChange={e => setTime(e.target.value)} placeholder="e.g. 35 min" style={inp} /></div>
-              <div><label style={lbl}>Serves:</label><input value={serves} onChange={e => setServes(e.target.value)} placeholder="e.g. 4–6" style={inp} /></div>
-              <div><label style={lbl}>Source:</label><input value={source} onChange={e => setSource(e.target.value)} placeholder="e.g. Mum, p.42" style={inp} /></div>
-            </div>
-            <div style={{ marginTop: "0.55rem" }}>
-              <label style={lbl}>Instructions: <span style={{ fontWeight: "400", color: C.inkFaint }}>(one step per line)</span></label>
-              <textarea value={method} onChange={e => setMethod(e.target.value)} placeholder={"Preheat oven to 180°C.\nCream butter and sugar until pale.\nFold in flour."} style={{ ...ta, minHeight: 80 }} />
-            </div>
-            <div style={{ marginTop: "0.55rem" }}>
-              <label style={lbl}>Notes:</label>
-              <textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Tips, tweaks, substitutions…" style={{ ...ta, minHeight: 50 }} />
-            </div>
-            <div style={{ marginTop: "0.55rem" }}>
-              <label style={lbl}>My Rating:</label>
-              <Stars value={rating} onChange={setRating} size="1.2rem" />
-            </div>
-          </div>
-          <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end", alignItems: "center" }}>
-            {recipe?.id && (
-              <button onClick={() => onDelete(recipe.id)} style={{ background: "transparent", color: C.red, border: "none", cursor: "pointer", fontSize: "0.82rem", marginRight: "auto" }}>
-                Delete Recipe
-              </button>
-            )}
-            <button onClick={onClose} style={{ background: "transparent", border: `1px solid ${C.spineFaint}`, borderRadius: 3, color: C.inkMuted, padding: "0.38rem 1rem", fontSize: "0.82rem", fontFamily: C.fontSans, cursor: "pointer" }}>Cancel</button>
-            <button onClick={save} disabled={busy || !title.trim()} style={{ background: C.accent, border: "none", borderRadius: 3, color: "#fff", padding: "0.38rem 1.2rem", fontSize: "0.82rem", fontFamily: C.fontSans, fontWeight: "bold", cursor: busy ? "not-allowed" : "pointer", opacity: (!title.trim() || busy) ? 0.5 : 1 }}>
+
+          {/* Actions */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "0.1rem" }}>
+            {recipe?.id
+              ? <button onClick={() => onDelete(recipe.id)} style={{ background: "transparent", color: C.red, border: "none", cursor: "pointer", fontSize: "0.8rem", fontFamily: C.fontSans }}>Delete Recipe</button>
+              : <span />
+            }
+            <button onClick={save} disabled={busy || !title.trim()}
+              style={{ background: "transparent", border: `1.5px solid ${C.inkMid}`, borderRadius: 5, color: C.ink, padding: "0.35rem 1.5rem", fontSize: "0.95rem", fontFamily: C.fontSans, fontWeight: "700", cursor: busy || !title.trim() ? "not-allowed" : "pointer", opacity: (!title.trim() || busy) ? 0.4 : 1, letterSpacing: "0.06em" }}>
               {busy ? "Saving…" : "SAVE"}
             </button>
           </div>
         </div>
       </div>
+      {showSecPicker && <div style={{ position: "fixed", inset: 0, zIndex: 9 }} onClick={() => setShowSecPicker(false)} />}
     </div>
   );
 }
@@ -527,20 +610,7 @@ export default function Cookbook() {
     setEditSecModal(null);
   };
 
-  const deleteSection = async (id) => { 
-    await dbDeleteSection(id); 
-    setSections(prev => prev.filter(s => s.id !== id)); 
-    setRecipes(prev => prev.filter(r => r.section_id !== id));
-  };
-
-  const deleteRecipe = async (id) => {
-    await dbDeleteRecipe(id);
-    setRecipes(prev => prev.filter(r => r.id !== id));
-    setRecipeModal(null);
-    if (nav?.recipe?.id === id) {
-      setNav(nav.section ? { section: nav.section } : null);
-    }
-  };
+  const deleteSection = async (id) => { await dbDeleteSection(id); setSections(prev => prev.filter(s => s.id !== id)); };
 
   const saveRecipe = async (data) => {
     const rec = { ...data, user_id: authUser.id, created_at: data.created_at || new Date().toISOString() };
@@ -571,7 +641,7 @@ export default function Cookbook() {
       <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.5rem 0 0 1rem", position: "sticky", top: 0, zIndex: 30, display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", paddingBottom: "0.45rem" }}>
           <span style={{ fontSize: "1rem", color: C.accent }}>★</span>
-          <button onClick={() => setNav(null)} style={{ background: "none", border: "none", fontFamily: C.font, fontSize: "1rem", fontWeight: "bold", color: C.ink, cursor: "pointer", padding: 0 }}>My Cookbook</button>
+          <button onClick={() => setNav(null)} style={{ background: "none", border: "none", fontFamily: C.font, fontSize: "1rem", fontWeight: "bold", color: C.ink, cursor: "pointer", padding: 0 }}>Meagan's Cookbook</button>
         </div>
         <div style={{ display: "flex", alignItems: "flex-end", gap: 2, paddingRight: "0.5rem", overflowX: "auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.3rem", paddingBottom: "0.45rem", marginRight: "0.4rem" }}>
@@ -662,8 +732,7 @@ export default function Cookbook() {
       {!nav?.recipe && !nav?.section && (
         <div style={{ position: "fixed", bottom: "1.2rem", right: "1rem", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.5rem", zIndex: 50 }}>
           <button onClick={() => setRecipeModal({})}
-            disabled={sections.length === 0}
-            style={{ background: C.accent, border: "none", borderRadius: 22, color: "#fff", padding: "0.55rem 1.1rem", fontSize: "0.82rem", fontFamily: C.fontSans, fontWeight: "700", opacity: sections.length === 0 ? 0.5 : 1, cursor: sections.length === 0 ? "not-allowed" : "pointer", boxShadow: "0 3px 12px rgba(92,61,143,0.4)" }}>
+            style={{ background: C.accent, border: "none", borderRadius: 22, color: "#fff", padding: "0.55rem 1.1rem", fontSize: "0.82rem", fontFamily: C.fontSans, fontWeight: "700", cursor: "pointer", boxShadow: "0 3px 12px rgba(92,61,143,0.4)" }}>
             + Add Recipe
           </button>
           <div style={{ display: "flex", gap: "0.35rem", alignItems: "center", background: C.pageInner, border: `1px solid ${C.spineFaint}`, borderRadius: 22, padding: "0.38rem 0.5rem 0.38rem 0.85rem", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
@@ -685,7 +754,6 @@ export default function Cookbook() {
           sections={sections}
           defaultSectionId={recipeModal?._defaultSection || nav?.section?.id || sections[0]?.id}
           onSave={saveRecipe}
-          onDelete={deleteRecipe}
           onClose={() => setRecipeModal(null)}
         />
       )}
