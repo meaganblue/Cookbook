@@ -627,7 +627,7 @@ export default function Cookbook() {
 
 const CookbookPage = () => {
   // Array to map through for generating our tabs cleanly
-  const tabs = [
+  
     { name: 'DASHBOARD', active: false },
     { name: 'RECIPES', active: false },
     { name: 'CONVERSIONS', active: true }, // The active tab
