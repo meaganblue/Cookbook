@@ -144,7 +144,7 @@ function AuthPage({ onAuth }) {
 // ─────────────────────────────────────────────
 // RECIPE MODAL
 // ─────────────────────────────────────────────
-function RecipeModal({ recipe, sections, defaultSectionId, onSave, onClose }) {
+function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onClose }) {
   const isNew = !recipe?.id;
   const [title, setTitle]   = useState(recipe?.title || "");
   const [secId, setSecId]   = useState(recipe?.section_id || defaultSectionId || sections[0]?.id || "");
@@ -163,33 +163,20 @@ function RecipeModal({ recipe, sections, defaultSectionId, onSave, onClose }) {
     setBusy(true);
     await onSave({
       id: recipe?.id || `rec-${Date.now()}`,
-      title: title.trim(), section_id: secId,
+      created_at: recipe?.created_at, // Preserves the original creation date
+      title: title.trim(), 
+      section_id: secId,
       ingredients: ings.split("\n").map(s => s.trim()).filter(Boolean),
       method: method.split("\n").map(s => s.trim()).filter(Boolean),
-      temp: temp.trim(), cook_time: time.trim(), servings: serves.trim(),
-      source: source.trim(), notes: notes.trim(), rating,
+      temp: temp.trim(), 
+      cook_time: time.trim(), 
+      servings: serves.trim(),
+      source: source.trim(), 
+      notes: notes.trim(), 
+      rating,
     });
     setBusy(false);
-    // Inside RecipeModal's save function
-await onSave({
-  id: recipe?.id || `rec-${Date.now()}`,
-  created_at: recipe?.created_at, // Add this line!
-  title: title.trim(), section_id: secId,
-  // ... rest of your fields
-});
-
   };
-// In RecipeModal's button row:
-{recipe?.id && (
-  <button onClick={() => onDelete(recipe.id)} style={{ background: "transparent", color: C.red, border: "none", cursor: "pointer", fontSize: "0.82rem", marginRight: "auto" }}>
-    Delete Recipe
-  </button>
-)}
-const deleteSection = async (id) => { 
-  await dbDeleteSection(id); 
-  setSections(prev => prev.filter(s => s.id !== id)); 
-  setRecipes(prev => prev.filter(r => r.section_id !== id)); // Add this line
-};
 
   const inp = { width: "100%", background: C.pageInner, border: `1px solid ${C.spineFaint}`, borderRadius: 2, color: C.ink, padding: "0.32rem 0.55rem", fontSize: "0.88rem", fontFamily: C.fontSans, outline: "none", boxSizing: "border-box" };
   const lbl = { fontSize: "0.68rem", fontFamily: C.fontSans, color: C.inkMuted, display: "block", marginBottom: "0.22rem", fontWeight: "600", letterSpacing: "0.04em" };
@@ -238,7 +225,12 @@ const deleteSection = async (id) => {
               <Stars value={rating} onChange={setRating} size="1.2rem" />
             </div>
           </div>
-          <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+          <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end", alignItems: "center" }}>
+            {recipe?.id && (
+              <button onClick={() => onDelete(recipe.id)} style={{ background: "transparent", color: C.red, border: "none", cursor: "pointer", fontSize: "0.82rem", marginRight: "auto" }}>
+                Delete Recipe
+              </button>
+            )}
             <button onClick={onClose} style={{ background: "transparent", border: `1px solid ${C.spineFaint}`, borderRadius: 3, color: C.inkMuted, padding: "0.38rem 1rem", fontSize: "0.82rem", fontFamily: C.fontSans, cursor: "pointer" }}>Cancel</button>
             <button onClick={save} disabled={busy || !title.trim()} style={{ background: C.accent, border: "none", borderRadius: 3, color: "#fff", padding: "0.38rem 1.2rem", fontSize: "0.82rem", fontFamily: C.fontSans, fontWeight: "bold", cursor: busy ? "not-allowed" : "pointer", opacity: (!title.trim() || busy) ? 0.5 : 1 }}>
               {busy ? "Saving…" : "SAVE"}
@@ -316,12 +308,6 @@ function RecipePage({ recipe, sectionName, onEdit, onBack }) {
         </div>
       </div>
     </div>
-    <button onClick={() => setRecipeModal({})}
-  disabled={sections.length === 0}
-  style={{ ... opacity: sections.length === 0 ? 0.5 : 1, cursor: sections.length === 0 ? "not-allowed" : "pointer" }}>
-  + Add Recipe
-</button>
-
   );
 }
 
@@ -399,13 +385,6 @@ function SectionTable({ section, recipes, onSectionClick, onEditSection, onDelet
         </div>
       )}
     </div>
-    const deleteRecipe = async (id) => {
-  await dbDeleteRecipe(id);
-  setRecipes(prev => prev.filter(r => r.id !== id));
-  setRecipeModal(null);
-  setNav(null); // Send them back to the main view
-};
-
   );
 }
 
@@ -547,7 +526,20 @@ export default function Cookbook() {
     setEditSecModal(null);
   };
 
-  const deleteSection = async (id) => { await dbDeleteSection(id); setSections(prev => prev.filter(s => s.id !== id)); };
+  const deleteSection = async (id) => { 
+    await dbDeleteSection(id); 
+    setSections(prev => prev.filter(s => s.id !== id)); 
+    setRecipes(prev => prev.filter(r => r.section_id !== id));
+  };
+
+  const deleteRecipe = async (id) => {
+    await dbDeleteRecipe(id);
+    setRecipes(prev => prev.filter(r => r.id !== id));
+    setRecipeModal(null);
+    if (nav?.recipe?.id === id) {
+      setNav(nav.section ? { section: nav.section } : null);
+    }
+  };
 
   const saveRecipe = async (data) => {
     const rec = { ...data, user_id: authUser.id, created_at: data.created_at || new Date().toISOString() };
@@ -578,7 +570,7 @@ export default function Cookbook() {
       <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.5rem 0 0 1rem", position: "sticky", top: 0, zIndex: 30, display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", paddingBottom: "0.45rem" }}>
           <span style={{ fontSize: "1rem", color: C.accent }}>★</span>
-          <button onClick={() => setNav(null)} style={{ background: "none", border: "none", fontFamily: C.font, fontSize: "1rem", fontWeight: "bold", color: C.ink, cursor: "pointer", padding: 0 }}>Meagan's Cookbook</button>
+          <button onClick={() => setNav(null)} style={{ background: "none", border: "none", fontFamily: C.font, fontSize: "1rem", fontWeight: "bold", color: C.ink, cursor: "pointer", padding: 0 }}>My Cookbook</button>
         </div>
         <div style={{ display: "flex", alignItems: "flex-end", gap: 2, paddingRight: "0.5rem", overflowX: "auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.3rem", paddingBottom: "0.45rem", marginRight: "0.4rem" }}>
@@ -669,7 +661,8 @@ export default function Cookbook() {
       {!nav?.recipe && !nav?.section && (
         <div style={{ position: "fixed", bottom: "1.2rem", right: "1rem", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.5rem", zIndex: 50 }}>
           <button onClick={() => setRecipeModal({})}
-            style={{ background: C.accent, border: "none", borderRadius: 22, color: "#fff", padding: "0.55rem 1.1rem", fontSize: "0.82rem", fontFamily: C.fontSans, fontWeight: "700", cursor: "pointer", boxShadow: "0 3px 12px rgba(92,61,143,0.4)" }}>
+            disabled={sections.length === 0}
+            style={{ background: C.accent, border: "none", borderRadius: 22, color: "#fff", padding: "0.55rem 1.1rem", fontSize: "0.82rem", fontFamily: C.fontSans, fontWeight: "700", opacity: sections.length === 0 ? 0.5 : 1, cursor: sections.length === 0 ? "not-allowed" : "pointer", boxShadow: "0 3px 12px rgba(92,61,143,0.4)" }}>
             + Add Recipe
           </button>
           <div style={{ display: "flex", gap: "0.35rem", alignItems: "center", background: C.pageInner, border: `1px solid ${C.spineFaint}`, borderRadius: 22, padding: "0.38rem 0.5rem 0.38rem 0.85rem", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
@@ -691,6 +684,7 @@ export default function Cookbook() {
           sections={sections}
           defaultSectionId={recipeModal?._defaultSection || nav?.section?.id || sections[0]?.id}
           onSave={saveRecipe}
+          onDelete={deleteRecipe}
           onClose={() => setRecipeModal(null)}
         />
       )}
