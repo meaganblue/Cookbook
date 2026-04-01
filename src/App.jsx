@@ -908,5 +908,6 @@ const saveRecipe = async (data) => {
       {editSecModal && <EditSectionModal section={editSecModal} onSave={renameSection} onClose={() => setEditSecModal(null)} />}
     <div>
     </div>
-      )};
+      );
                
+    </div>
