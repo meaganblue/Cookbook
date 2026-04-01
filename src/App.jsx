@@ -682,7 +682,7 @@ export default function Cookbook() {
   if (!authUser) return <AuthPage onAuth={setAuthUser} />;
 
   // ── sidebar tab definitions (fixed + dynamic recipe sections)
-  const FIXED_TABS = ["DASHBOARD", "SAUCES & SPICES", "SOUPS", "SALADS", "SNACKS", "CANNING", "SLOW COOKER", "SIDES", "PASTA", "RICE", "POULTRY", "MEAT"];
+  const FIXED_TABS = ["DASHBOARD", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "CANNING & SLOW COOKER", "VEGGIES", "PASTA", "RICE", "MEATS"];
 
 
   // When navigating to a recipe/section, auto-switch to RECIPES tab
@@ -716,9 +716,9 @@ export default function Cookbook() {
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
 
           {/* Left binder spine with hole punches */}
-          <div style={{ width: 22, flexShrink: 0, background: C.paper, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0.75rem", gap: "1.4rem" }}>
+          <div style={{ width: 0, flexShrink: 0, background: C.paper, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0.75rem", gap: "1.4rem" }}>
             {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} style={{ width: 0, height: 0, borderRadius: "50%", background: C.spineFaint, border: `1.5px solid ${C.spineLight}`, boxShadow: "inset 0 1px 3px rgba(0,0,0,0.25)", flexShrink: 0 }} />
+              <div key={i} style={{ width: 0, height: 0, borderRadius: "50%", background: C.spineFaint, boxShadow: "inset 0 1px 3px rgba(0,0,0,0.25)", flexShrink: 0 }} />
             ))}
           </div>
 
@@ -822,7 +822,7 @@ export default function Cookbook() {
             {/* PLACEHOLDER TABS */}
             {["CONVERSIONS","TIPS","KITCHEN NOTES","PLANNER"].includes(activeTab) && (
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", flexDirection: "column", gap: "0.5rem", color: C.inkFaint, fontFamily: C.font }}>
-                <div style={{ fontSize: "1.8rem" }}>📄</div>
+                <div style={{ fontSize: "1.8 rem" }}>📄</div>
                 <div style={{ fontSize: "0.9rem", fontStyle: "italic" }}>{activeTab}</div>
                 <div style={{ fontSize: "0.75rem" }}>Coming soon</div>
               </div>
@@ -862,10 +862,11 @@ export default function Cookbook() {
                     fontFamily: C.fontSans,
                     fontWeight: "700",
                     letterSpacing: "0.12em",
+                      rows: "2",
                     textTransform: "uppercase",
                     color: active ? C.accent : "rgba(240,225,200,0.75)",
-                    whiteSpace: "nowrap",
-                    lineHeight: 1,
+                    whiteSpace: "wrap",
+                    lineHeight: 3,
                   }}>{tab}</span>
                 </button>
               );
