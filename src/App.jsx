@@ -875,7 +875,7 @@ const saveRecipe = async (data) => {
           </div>
         </div>
       </div>
-
+)
       {/* FLOATING RECIPE/SECTION BUTTONS — only on recipes tab */}
       {activeTab === "RECIPES" && !nav?.recipe && !nav?.section && (
         <div style={{ position: "fixed", bottom: "1.2rem", right: "3rem", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.5rem", zIndex: 50 }}>
