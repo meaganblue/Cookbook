@@ -397,7 +397,7 @@ function SectionTable({ section, recipes, onSectionClick, onEditSection, onDelet
         </div>
       )}
     </div>
-  ){
+  );{
 
 // ─────────────────────────────────────────────
 // EDIT SECTION NAME MODAL
