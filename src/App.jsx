@@ -635,31 +635,8 @@ export default function Cookbook() {
 
   const handleLogout = async () => { await supabase.auth.signOut(); setAuthUser(null); setSections([]); setRecipes([]); };
 
-  const addSection = async () => {
-    if (!addSecName.trim()) return;
-    const s = { id: `sec-${Date.now()}`, user_id: authUser.id, name: addSecName.trim(), position: sections.length };
-    const saved = await dbUpsertSection(s);
-    setSections(prev => [...prev, saved || s]);
-    setAddSecName("");
-  };
-
-  const renameSection = async (name) => {
-    const updated = { ...editSecModal, name: name.trim() };
-    await dbUpsertSection(updated);
-    setSections(prev => prev.map(s => s.id === updated.id ? updated : s));
-    setEditSecModal(null);
-  };
-
-  const deleteSection = async (id) => { await dbDeleteSection(id); setSections(prev => prev.filter(s => s.id !== id)); };
-
-  const deleteRecipe = async (id) => {
-    await dbDeleteRecipe(id);
-    setRecipes(prev => prev.filter(r => r.id !== id));
-    setRecipeModal(null);
-    if (nav?.recipe?.id === id) setNav(nav?.section ? { section: nav.section } : null);
-  };
-
-  const saveRecipe = async (data) => {
+  
+const saveRecipe = async (data) => {
     const rec = { ...data, user_id: authUser.id, created_at: data.created_at || new Date().toISOString() };
     const saved = await dbUpsertRecipe(rec);
     const final = saved || rec;
@@ -667,6 +644,17 @@ export default function Cookbook() {
     setRecipeModal(null);
     if (nav?.recipe?.id === final.id) setNav(n => ({ ...n, recipe: final }));
   };
+  
+
+  
+  const deleteRecipe = async (id) => {
+    await dbDeleteRecipe(id);
+    setRecipes(prev => prev.filter(r => r.id !== id));
+    setRecipeModal(null);
+    if (nav?.recipe?.id === id) setNav(nav?.section ? { section: nav.section } : null);
+  };
+
+  
 
   const handlePrint = () => {
     const html = generatePrintHTML(sections, recipes);
@@ -709,6 +697,11 @@ export default function Cookbook() {
               style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
               Print Book
             </button>
+          </button>
+          <button onClick= {handleAddRecipe}
+            style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
+              Add Recipe
+          </button>
           </div>
         </div>
 
