@@ -813,7 +813,6 @@ export default CookbookPage;
           onSave={renameSection} 
           onClose={() => setEditSecModal(null)} 
           />
-</button>
                 
       )}
     </div>
