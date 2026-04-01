@@ -715,12 +715,7 @@ export default function Cookbook() {
         {/* ── MAIN AREA: spine + page + right tabs ── */}
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
 
-          {/* Left binder spine with hole punches */}
-          <div style={{ width: 22, flexShrink: 0, background: C.spine, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0.75rem", gap: "1.4rem" }}>
-            {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} style={{ width: 13, height: 13, borderRadius: "50%", background: C.spineFaint, border: `1.5px solid ${C.spineLight}`, boxShadow: "inset 0 1px 3px rgba(0,0,0,0.25)", flexShrink: 0 }} />
-            ))}
-          </div>
+          
 
           {/* ── PAGE CONTENT ── */}
           <div style={{ flex: 1, overflowY: "auto", background: C.pageInner, minWidth: 0 }}>
@@ -803,9 +798,8 @@ export default function Cookbook() {
                   />
                   <DashboardTable
                     title="COMMON SUBSTITUTIONS"
-                    cols={2}
                     rows={5}
-                    flex={1}
+                    
                   />
                 </div>
 
@@ -830,7 +824,7 @@ export default function Cookbook() {
           </div>
 
           {/* ── RIGHT BINDER TABS ── */}
-          <div style={{ width: 36, flexShrink: 0, background: C.spine, display: "flex", flexDirection: "column", paddingTop: "0.5rem", paddingBottom: "0.5rem", gap: 3 }}>
+          <div style={{ width: 30, height:50, flexShrink: 0, background: C.spine, display: "flex", flexDirection: "column", paddingTop: "0.5rem", paddingBottom: "0.5rem", gap: 3 }}>
             {FIXED_TABS.map(tab => {
               const active = activeTab === tab;
               return (
