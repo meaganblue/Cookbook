@@ -682,7 +682,7 @@ export default function Cookbook() {
   if (!authUser) return <AuthPage onAuth={setAuthUser} />;
 
   // ── sidebar tab definitions (fixed + dynamic recipe sections)
-  const FIXED_TABS = ["DASHBOARD", "RECIPES", "CONVERSIONS", "TIPS", "KITCHEN NOTES", "PLANNER"];
+  const FIXED_TABS = ["DASHBOARD", "SAUCES & SPICES", "SOUPS", "SALADS", "SNACKS", "CANNING", "SLOW COOKER", "SIDES", "PASTA", "RICE", "POULTRY", "MEAT"];
 
 
   // When navigating to a recipe/section, auto-switch to RECIPES tab
@@ -698,15 +698,15 @@ export default function Cookbook() {
       <div style={{ flex: 1, background: C.paper, borderRadius: 8, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.4)", display: "flex", flexDirection: "column", border: `2px solid ${C.spine}` }}>
 
         {/* ── TOP BAR ── */}
-        <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.6rem 0.85rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+        <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.6rem 0.65rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <span style={{ fontFamily: C.font, fontSize: "1.15rem", fontWeight: "bold", color: C.ink }}>Meagan's Cookbook</span>
           <div style={{ display: "flex", gap: "0.4rem" }}>
             <button onClick={handleLogout}
-              style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
+              style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
               Log Out
             </button>
             <button onClick={handlePrint}
-              style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
+              style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
               Print Book
             </button>
           </div>
@@ -718,7 +718,7 @@ export default function Cookbook() {
           {/* Left binder spine with hole punches */}
           <div style={{ width: 22, flexShrink: 0, background: C.paper, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0.75rem", gap: "1.4rem" }}>
             {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} style={{ width: 13, height: 13, borderRadius: "50%", background: C.spineFaint, border: `1.5px solid ${C.spineLight}`, boxShadow: "inset 0 1px 3px rgba(0,0,0,0.25)", flexShrink: 0 }} />
+              <div key={i} style={{ width: 0, height: 0, borderRadius: "50%", background: C.spineFaint, border: `1.5px solid ${C.spineLight}`, boxShadow: "inset 0 1px 3px rgba(0,0,0,0.25)", flexShrink: 0 }} />
             ))}
           </div>
 
