@@ -359,7 +359,7 @@ function RecipePage({ recipe, sectionName, onEdit, onBack }) {
                   <div key={i} style={{ fontSize: "0.85rem", fontFamily: C.fontSans, color: C.inkMid, padding: "0.1rem 0", display: "flex", gap: "0.35rem" }}>
                     <span style={{ color: C.accent, flexShrink: 0 }}>—</span><span>{ing}</span>
                   </div>
-                )};{
+                ))};{
 // ─────────────────────────────────────────────
 // SECTION TABLE (main binder view)
 // ─────────────────────────────────────────────
