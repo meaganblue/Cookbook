@@ -814,4 +814,4 @@ export default CookbookPage;
           onClose={() => setEditSecModal(null)} 
           />
                 
-      )
+      )}
