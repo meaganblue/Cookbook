@@ -812,8 +812,12 @@ export default CookbookPage;
           section={editSecModal} 
           onSave={renameSection} 
           onClose={() => setEditSecModal(null)} 
-        />
+</button>
+                )}
+              </div>
+            ) : (
+              <>
+                {loading && <div style={{ color: C.inkFaint, textAlign: "center", padding: "2rem", fontStyle: "italic" }}>Opening cookbook…</div>}
+                     />
       )}
     </div>
-  ); // Removed extra }; and }
-}
