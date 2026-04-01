@@ -577,7 +577,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
   const cellBorder = `1px solid ${C.accent}`;
 
   return (
-    <div style={{ border, borderRadius: 3, border: `1px solid ${C.spineFaint}`,, overflow: "hidden", background: "C.paper", display: "flex", flexDirection: "column", flex: flex || "none" }}>
+    <div style={{ border, borderRadius: 3, border: `1px solid ${C.spineFaint}`, overflow: "hidden", background: "C.paper", display: "flex", flexDirection: "column", flex: flex || "none" }}>
       <div style={{ background: "#DDD0EC", borderBottom: border, padding: "0.32rem 0.6rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.72rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "left", textTransform: "uppercase" }}>
         {title}
       </div>
