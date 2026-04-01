@@ -585,7 +585,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
         <div style={{ padding: "0.4rem 0.6rem", display: "flex", flexDirection: "column", gap: "0.3rem", background: "#FAF4FC", flex: 1 }}>
           {Array.from({ length: rows }).map((_, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
+              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, rowHeight:15, flexShrink: 0 }}>〜</span>
               <input value={cells[i] || ""} onChange={e => update(i, e.target.value)}
                 style={{ flex: 1, background: "transparent", border: "none", borderBottom: cellBorder, outline: "none", fontFamily: C.fontSans, fontSize: "0.82rem", color: C.inkMid, padding: "0.18rem 0" }} />
               <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
@@ -596,7 +596,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
         <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, background: "#FAF4FC", flex: 1 }}>
           {Array.from({ length: cols * rows }).map((_, i) => (
             <input key={i} value={cells[i] || ""} onChange={e => update(i, e.target.value)}
-              style={{ background: "transparent", border: "none", borderRight: (i % cols) < (cols - 1) ? cellBorder : "none", borderBottom: i < cols * (rows - 1) ? cellBorder : "none", outline: "none", fontFamily: C.fontSans, fontSize: "0.8rem", color: C.inkMid, padding: "0.28rem 0.4rem", width: "100%", boxSizing: "border-box", minHeight: 26 }} />
+              style={{ background: "transparent", border: "none", borderRight: (i % cols) < (cols - 1) ? cellBorder : "none", borderBottom: i < cols * (rows - 1) ? cellBorder : "none", outline: "none", fontFamily: C.fontSans, fontSize: "0.8rem", color: C.inkMid, padding: "0.28rem 0.4rem", width: "100%", boxSizing: "border-box", minHeight: 16 }} />
           ))}
         </div>
       )}
@@ -716,7 +716,7 @@ export default function Cookbook() {
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
 
           {/* Left binder spine with hole punches */}
-          <div style={{ width: 22, flexShrink: 0, background: C.spine, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0.75rem", gap: "1.4rem" }}>
+          <div style={{ width: 22, flexShrink: 0, background: C.paper, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0.75rem", gap: "1.4rem" }}>
             {Array.from({ length: 9 }).map((_, i) => (
               <div key={i} style={{ width: 13, height: 13, borderRadius: "50%", background: C.spineFaint, border: `1.5px solid ${C.spineLight}`, boxShadow: "inset 0 1px 3px rgba(0,0,0,0.25)", flexShrink: 0 }} />
             ))}
@@ -783,7 +783,7 @@ export default function Cookbook() {
 
             {/* DASHBOARD VIEW — matches mockup */}
             {activeTab === "DASHBOARD" && !nav?.recipe && !nav?.section && (
-              <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.6rem", height: "100%", boxSizing: "border-box" }}>
+              <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.6rem", height: "97%", boxSizing: "border-box" }}>
 
                 {/* ── TABLE 1: Measurement Equivalents — 3 columns ── */}
                 <DashboardTable
@@ -814,7 +814,7 @@ export default function Cookbook() {
                   title="KITCHEN NOTES"
                   titleCenter
                   isNotes
-                  rows={6}
+                  rows={12}
                 />
               </div>
             )}
