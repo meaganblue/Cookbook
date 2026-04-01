@@ -846,11 +846,11 @@ export default function Cookbook() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    height: "50",
+                    height: "30",
                     padding: "0.2rem 0",
                     boxShadow: active ? "2px 0 8px rgba(0,0,0,0.2)" : "none",
                     transition: "all 0.12s",
-                    overflow: "hidden",
+                  
                   }}
                   onMouseEnter={e => { if (!active) e.currentTarget.style.background = "#6B4535"; }}
                   onMouseLeave={e => { if (!active) e.currentTarget.style.background = "#5A3828"; }}
@@ -866,7 +866,8 @@ export default function Cookbook() {
                     textTransform: "uppercase",
                     color: active ? C.accent : "rgba(240,225,200,0.75)",
                     whiteSpace: "wrap",
-                    lineHeight: 3,
+                    lineHeight: 1,
+                  
                   }}>{tab}</span>
                 </button>
               );
