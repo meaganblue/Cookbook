@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from "react";
-import { supabase } from "./supabase";
+import { supabase } from "./supabase"; // Make sure your path to supabaseClient is correct!
 
 // ─────────────────────────────────────────────
 // DESIGN TOKENS
@@ -143,6 +143,32 @@ function AuthPage({ onAuth }) {
 }
 
 // ─────────────────────────────────────────────
+// DASHBOARD COMPONENTS (NEW)
+// ─────────────────────────────────────────────
+function DashboardBox({ title, children, flex }) {
+  return (
+    <div style={{ background: C.pageInner, border: `1px solid ${C.spineFaint}`, borderRadius: 8, overflow: "hidden", display: "flex", flexDirection: "column", boxShadow: "0 4px 12px rgba(0,0,0,0.04)", flex: flex || "auto" }}>
+      <div style={{ background: C.accentFade, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.45rem 0.85rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.75rem", letterSpacing: "0.08em", color: C.accent }}>
+        {title}
+      </div>
+      <div style={{ padding: "0.85rem", flex: 1, display: "flex", flexDirection: "column" }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function EditableTable({ cols, rows }) {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: "0.5rem 1rem" }}>
+      {Array.from({ length: cols * rows }).map((_, i) => (
+        <input key={i} style={{ background: "transparent", border: "none", borderBottom: `1px solid ${C.line}`, outline: "none", fontFamily: C.fontSans, fontSize: "0.85rem", color: C.inkMid, padding: "0.2rem 0", width: "100%", boxSizing: "border-box" }} />
+      ))}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
 // INGREDIENT GRID — two-column dash layout
 // ─────────────────────────────────────────────
 function IngredientGrid({ value, onChange, fieldStyle }) {
@@ -180,7 +206,7 @@ function IngredientGrid({ value, onChange, fieldStyle }) {
 }
 
 // ─────────────────────────────────────────────
-// RECIPE MODAL  — styled to match mockup
+// RECIPE MODAL
 // ─────────────────────────────────────────────
 function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onClose }) {
   const [title, setTitle]   = useState(recipe?.title || "");
@@ -211,15 +237,7 @@ function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onC
     setBusy(false);
   };
 
-  // Underline-only fields — matches mockup aesthetic
-  const uLine = {
-    background: "transparent", border: "none",
-    borderBottom: `1.5px solid ${C.inkMid}`,
-    borderRadius: 0, color: C.ink,
-    padding: "0.15rem 0.1rem", fontSize: "0.92rem",
-    fontFamily: C.fontSans, outline: "none",
-    width: "100%", boxSizing: "border-box",
-  };
+  const uLine = { background: "transparent", border: "none", borderBottom: `1.5px solid ${C.inkMid}`, borderRadius: 0, color: C.ink, padding: "0.15rem 0.1rem", fontSize: "0.92rem", fontFamily: C.fontSans, outline: "none", width: "100%", boxSizing: "border-box" };
   const uTA = { ...uLine, resize: "none", lineHeight: 1.8, display: "block" };
   const rowLbl = { fontSize: "0.95rem", fontFamily: C.fontSans, color: C.ink, whiteSpace: "nowrap", flexShrink: 0, lineHeight: 1.5 };
   const selectedSection = sections.find(s => s.id === secId);
@@ -227,33 +245,22 @@ function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onC
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(26,18,8,0.55)", zIndex: 200, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "0.75rem", overflowY: "auto" }}>
       <div style={{ background: C.pageInner, border: `1.5px solid ${C.inkMid}`, borderRadius: 6, width: "100%", maxWidth: 440, margin: "auto", boxShadow: "0 12px 40px rgba(0,0,0,0.28)", overflow: "hidden", ...ruled }}>
-
-        {/* Header */}
         <div style={{ background: C.paper, borderBottom: `1px solid ${C.line}`, padding: "0.7rem 1.1rem 0.6rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "1.05rem", color: C.ink }}>Recipe Input Popup</span>
           <button onClick={onClose} style={{ background: "none", border: "none", color: C.inkMuted, fontSize: "1.3rem", cursor: "pointer", lineHeight: 1 }}>×</button>
         </div>
-
         <div style={{ padding: "0.9rem 1.1rem 1.1rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-
-          {/* Name */}
           <div style={{ display: "flex", alignItems: "baseline", gap: "0.4rem" }}>
             <span style={rowLbl}>Name:</span>
             <input value={title} onChange={e => setTitle(e.target.value)} style={{ ...uLine, fontSize: "1rem" }} />
           </div>
-
-          {/* Ingredients two-col dash grid */}
           <div>
             <div style={{ ...rowLbl, marginBottom: "0.35rem" }}>Ingredients:</div>
             <IngredientGrid value={ings} onChange={setIngs} fieldStyle={uLine} />
           </div>
-
-          {/* Recipe Info box */}
           <div style={{ border: `1.5px solid ${C.inkMid}`, borderRadius: 4, padding: "0.65rem 0.85rem 0.75rem", background: "transparent" }}>
             <div style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "1rem", color: C.ink, marginBottom: "0.6rem" }}>Recipe Info</div>
-
             <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
-              {/* Left: Temp / Time / Serves */}
               <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.3rem" }}>
                 {[["Temp:", temp, setTemp], ["Time:", time, setTime], ["Serves:", serves, setServes]].map(([lbl, val, set]) => (
                   <div key={lbl} style={{ display: "flex", alignItems: "baseline", gap: "0.35rem" }}>
@@ -262,8 +269,6 @@ function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onC
                   </div>
                 ))}
               </div>
-
-              {/* Right: Section pill */}
               <div style={{ flexShrink: 0, position: "relative" }}>
                 <button onClick={() => setShowSecPicker(p => !p)}
                   style={{ background: C.accent, border: "none", borderRadius: 10, color: "#fff", padding: "0.5rem 0.9rem", fontSize: "0.85rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer", textAlign: "center", minWidth: 88, lineHeight: 1.4, whiteSpace: "pre-line" }}>
@@ -283,33 +288,23 @@ function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onC
                 )}
               </div>
             </div>
-
-            {/* Instructions */}
             <div style={{ marginTop: "0.4rem", display: "flex", alignItems: "flex-start", gap: "0.35rem" }}>
               <span style={{ ...rowLbl, paddingTop: "0.1rem", minWidth: 90 }}>Instructions:</span>
               <textarea value={method} onChange={e => setMethod(e.target.value)} rows={3} style={{ ...uTA, flex: 1 }} />
             </div>
-
-            {/* Notes */}
             <div style={{ marginTop: "0.35rem", display: "flex", alignItems: "baseline", gap: "0.35rem" }}>
               <span style={{ ...rowLbl, minWidth: 52 }}>Notes:</span>
               <input value={notes} onChange={e => setNotes(e.target.value)} style={uLine} />
             </div>
-
-            {/* Source */}
             <div style={{ marginTop: "0.35rem", display: "flex", alignItems: "baseline", gap: "0.35rem" }}>
               <span style={{ ...rowLbl, minWidth: 52 }}>Source:</span>
               <input value={source} onChange={e => setSource(e.target.value)} style={uLine} />
             </div>
-
-            {/* Rating */}
             <div style={{ marginTop: "0.45rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
               <span style={rowLbl}>Rating:</span>
               <Stars value={rating} onChange={setRating} size="1.1rem" />
             </div>
           </div>
-
-          {/* Actions */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "0.1rem" }}>
             {recipe?.id
               ? <button onClick={() => onDelete(recipe.id)} style={{ background: "transparent", color: C.red, border: "none", cursor: "pointer", fontSize: "0.8rem", fontFamily: C.fontSans }}>Delete Recipe</button>
@@ -494,79 +489,6 @@ function EditSectionModal({ section, onSave, onClose }) {
 }
 
 // ─────────────────────────────────────────────
-// PRINT EXPORT
-// ─────────────────────────────────────────────
-function generatePrintHTML(sections, recipes) {
-  const sorted = [...sections].sort((a, b) => a.position - b.position);
-
-  const recipeHTML = r => `
-    <div class="recipe-page">
-      <div class="recipe-header">
-        <h2 class="recipe-title">${r.title}</h2>
-        <div class="recipe-meta">
-          ${r.cook_time ? `<span>Time: ${r.cook_time}</span>` : ""}
-          ${r.temp      ? `<span>Temp: ${r.temp}</span>` : ""}
-          ${r.servings  ? `<span>Serves: ${r.servings}</span>` : ""}
-          ${r.source    ? `<span class="src">Source: ${r.source}</span>` : ""}
-        </div>
-      </div>
-      <div class="recipe-body">
-        ${r.ingredients?.length ? `<div class="block"><h3>Ingredients</h3><div class="ing-grid">${r.ingredients.map(i => `<div class="ing">— ${i}</div>`).join("")}</div></div>` : ""}
-        ${r.method?.length ? `<div class="block"><h3>Instructions</h3><ol>${r.method.map(s => `<li>${s}</li>`).join("")}</ol></div>` : ""}
-        ${r.notes ? `<div class="block notes-block"><h3>Notes</h3><p class="notes-text">${r.notes}</p></div>` : ""}
-      </div>
-    </div>`;
-
-  const tocSec = sec => {
-    const recs = recipes.filter(r => r.section_id === sec.id);
-    if (!recs.length) return "";
-    return `<div class="toc-sec"><div class="toc-sec-name">${sec.name}</div>${recs.map((r, i) => `<div class="toc-row"><span class="toc-num">${i + 1}.</span> ${r.title}</div>`).join("")}</div>`;
-  };
-
-  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>My Cookbook</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Trebuchet MS','Gill Sans',sans-serif;background:#fff;color:#1A1208;font-size:11pt;line-height:1.5;}
-.cover{page-break-after:always;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#6B4C3B;color:#F5F0E8;text-align:center;padding:3rem;}
-.cover-star{font-size:4rem;color:#C4A882;margin-bottom:1rem;}
-.cover-title{font-family:Georgia,serif;font-size:3rem;font-weight:700;letter-spacing:.05em;}
-.cover-sub{font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;margin-top:.5rem;color:#C4A882;}
-.toc-page{page-break-after:always;padding:2.5rem;background:#F5F0E8;min-height:100vh;background-image:repeating-linear-gradient(to bottom,transparent,transparent 29px,#E2D9C8 29px,#E2D9C8 30px);background-position-y:36px;}
-.toc-heading{font-family:Georgia,serif;font-size:1.6rem;font-weight:700;color:#1A1208;margin-bottom:1.5rem;padding-bottom:.5rem;border-bottom:2px solid #9B7355;}
-.toc-sec{margin-bottom:1.2rem;}
-.toc-sec-name{font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.1em;color:#5C3D8F;padding:.3rem 0;border-bottom:1px solid #E2D9C8;margin-bottom:.3rem;}
-.toc-row{padding:.18rem 0 .18rem 1rem;font-size:.88rem;color:#3D2E1A;}
-.toc-num{color:#9B7355;font-weight:600;}
-.sec-div{page-break-before:always;page-break-after:always;height:100vh;display:flex;align-items:center;justify-content:center;background:#6B4C3B;color:#F5F0E8;}
-.sec-div-inner{text-align:center;}
-.sec-div-lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.2em;color:#C4A882;margin-bottom:.5rem;}
-.sec-div-name{font-family:Georgia,serif;font-size:2.8rem;font-weight:700;}
-.recipe-page{page-break-before:always;padding:2rem 2.5rem;background:#FDFAF4;background-image:repeating-linear-gradient(to bottom,transparent,transparent 29px,#E2D9C8 29px,#E2D9C8 30px);background-position-y:36px;min-height:100vh;}
-.recipe-header{padding-bottom:.75rem;margin-bottom:1rem;border-bottom:2px solid #C4A882;}
-.recipe-title{font-family:Georgia,serif;font-size:1.8rem;font-weight:700;color:#1A1208;line-height:1.2;margin-bottom:.4rem;}
-.recipe-meta{display:flex;flex-wrap:wrap;gap:1rem;font-size:.78rem;color:#7A6548;}
-.recipe-meta .src{font-style:italic;}
-.block{margin-bottom:1.2rem;}
-.block h3{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:#9B7355;font-weight:700;margin-bottom:.5rem;padding-bottom:.2rem;border-bottom:1px solid #E2D9C8;}
-.ing-grid{display:grid;grid-template-columns:1fr 1fr;gap:.12rem 1.5rem;font-size:.88rem;}
-.ing{color:#3D2E1A;padding:.1rem 0;}
-ol{padding-left:1.2rem;}
-ol li{margin-bottom:.45rem;font-size:.9rem;line-height:1.55;color:#3D2E1A;}
-.notes-block{background:#FAF6EE;border-left:3px solid #C4A882;padding:.6rem .85rem;border-radius:0 3px 3px 0;}
-.notes-text{font-style:italic;font-size:.85rem;color:#7A6548;line-height:1.5;}
-@media print{body{print-color-adjust:exact;-webkit-print-color-adjust:exact;}.cover,.sec-div{background:#6B4C3B!important;}}
-</style></head><body>
-<div class="cover"><div class="cover-star">★</div><div class="cover-title">My Cookbook</div><div class="cover-sub">A personal collection</div></div>
-<div class="toc-page"><div class="toc-heading">★ Table of Contents</div>${sorted.map(tocSec).join("")}</div>
-${sorted.map(sec => {
-  const recs = recipes.filter(r => r.section_id === sec.id);
-  if (!recs.length) return "";
-  return `<div class="sec-div"><div class="sec-div-inner"><div class="sec-div-lbl">Section</div><div class="sec-div-name">${sec.name}</div></div></div>${recs.map(recipeHTML).join("")}`;
-}).join("")}
-</body></html>`;
-}
-
-// ─────────────────────────────────────────────
 // ROOT APP
 // ─────────────────────────────────────────────
 export default function Cookbook() {
@@ -622,14 +544,6 @@ export default function Cookbook() {
     if (nav?.recipe?.id === final.id) setNav(n => ({ ...n, recipe: final }));
   };
 
-  const handlePrint = () => {
-    const html = generatePrintHTML(sections, recipes);
-    const w = window.open("", "_blank");
-    w.document.write(html);
-    w.document.close();
-    setTimeout(() => w.print(), 600);
-  };
-
   const searched = search ? recipes.filter(r => r.title.toLowerCase().includes(search.toLowerCase()) || (r.ingredients || []).some(i => i.toLowerCase().includes(search.toLowerCase()))) : recipes;
 
   if (authUser === undefined) return <div style={{ minHeight: "100vh", background: C.paper, display: "flex", alignItems: "center", justifyContent: "center", color: C.inkMuted, fontFamily: C.fontSans }}>Opening cookbook…</div>;
@@ -646,7 +560,6 @@ export default function Cookbook() {
         </div>
         <div style={{ display: "flex", alignItems: "flex-end", gap: 2, paddingRight: "0.5rem", overflowX: "auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.3rem", paddingBottom: "0.45rem", marginRight: "0.4rem" }}>
-            <button onClick={handlePrint} style={{ background: C.accentFade, border: `1px solid ${C.accent}`, borderRadius: 4, color: C.accent, padding: "0.2rem 0.55rem", fontSize: "0.62rem", fontFamily: C.fontSans, cursor: "pointer", fontWeight: "700", whiteSpace: "nowrap" }}>🖨 Print Book</button>
             <button onClick={handleLogout} style={{ background: "transparent", border: "none", color: C.inkFaint, padding: "0.18rem 0.35rem", fontSize: "0.6rem", cursor: "pointer" }}>Log out</button>
           </div>
           {sections.map(s => {
@@ -708,10 +621,31 @@ export default function Cookbook() {
             ) : (
               <>
                 {loading && <div style={{ color: C.inkFaint, textAlign: "center", padding: "2rem", fontStyle: "italic" }}>Opening cookbook…</div>}
+                
+                {/* NEW DASHBOARD LAYOUT FROM YOUR IMAGE */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.85rem", marginBottom: "1.5rem" }}>
+                  <div style={{ flex: "1 1 300px", display: "flex" }}>
+                    <DashboardBox title="SECTION 1 (3 COLUMNS)" flex={1}>
+                       <EditableTable cols={3} rows={12} />
+                    </DashboardBox>
+                  </div>
+                  <div style={{ flex: "1 1 200px", display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+                     <DashboardBox title="SECTION 2 (2 COLUMNS)">
+                        <EditableTable cols={2} rows={5} />
+                     </DashboardBox>
+                     <DashboardBox title="SECTION 3 (BLANK)" flex={1}>
+                        <textarea 
+                           style={{ flex: 1, minHeight: "120px", width: "100%", background: "transparent", border: "none", outline: "none", resize: "none", fontFamily: C.fontSans, fontSize: "0.85rem", color: C.inkMid, lineHeight: "30px", backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent 29px, ${C.line} 29px, ${C.line} 30px)`, backgroundAttachment: "local", padding: 0 }} 
+                           placeholder="Tap to type notes..." 
+                        />
+                     </DashboardBox>
+                  </div>
+                </div>
+                {/* END NEW DASHBOARD LAYOUT */}
+
+                <div style={{ fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.1em", color: C.inkMuted, marginBottom: "0.5rem", marginTop: "1rem" }}>Your Saved Sections</div>
                 {!loading && sections.length === 0 && (
-                  <div style={{ textAlign: "center", padding: "3rem 1rem", color: C.inkMuted }}>
-                    <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>📖</div>
-                    <div style={{ fontFamily: C.font, fontSize: "1rem", marginBottom: "0.4rem" }}>Your cookbook is empty.</div>
+                  <div style={{ textAlign: "center", padding: "1.5rem 1rem", color: C.inkMuted }}>
                     <div style={{ fontSize: "0.78rem", color: C.inkFaint }}>Add your first section using the field below.</div>
                   </div>
                 )}
