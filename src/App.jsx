@@ -617,6 +617,7 @@ export default function Cookbook() {
   const [editSecModal, setEditSecModal] = useState(null);
   const [addSecName, setAddSecName] = useState("");
   const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState("DASHBOARD");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setAuthUser(session?.user || null));
@@ -682,7 +683,7 @@ export default function Cookbook() {
 
   // ── sidebar tab definitions (fixed + dynamic recipe sections)
   const FIXED_TABS = ["DASHBOARD", "RECIPES", "CONVERSIONS", "TIPS", "KITCHEN NOTES", "PLANNER"];
-  const [activeTab, setActiveTab] = useState("DASHBOARD");
+
 
   // When navigating to a recipe/section, auto-switch to RECIPES tab
   const goNav = (navVal) => { 
