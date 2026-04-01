@@ -880,7 +880,7 @@ export default function Cookbook() {
                     lineHeight: 1,
   height: 35}
                 
-                  }}>{tab}</span>
+                  }>{tab}</span>
                 </button>
               );
             })}
