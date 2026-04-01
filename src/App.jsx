@@ -548,7 +548,16 @@ export default function Cookbook() {
 
   if (authUser === undefined) return <div style={{ minHeight: "100vh", background: C.paper, display: "flex", alignItems: "center", justifyContent: "center", color: C.inkMuted, fontFamily: C.fontSans }}>Opening cookbook…</div>;
   if (!authUser) return <AuthPage onAuth={setAuthUser} />;
-
+const CookbookPage = () => {
+  // Array to map through for generating our tabs cleanly
+  const tabs = [
+    { name: 'DASHBOARD', active: false },
+    { name: 'RECIPES', active: false },
+    { name: 'CONVERSIONS', active: true }, // The active tab
+    { name: 'TIPS', active: false },
+    { name: 'KITCHEN NOTES', active: false },
+    { name: 'PLANNER', active: false },
+  ];
   return (
     <div style={{ minHeight: "100vh", background: C.paper, display: "flex", flexDirection: "column", fontFamily: C.fontSans }}>
 
@@ -621,24 +630,9 @@ export default function Cookbook() {
             ) : (
               <>
                 {loading && <div style={{ color: C.inkFaint, textAlign: "center", padding: "2rem", fontStyle: "italic" }}>Opening cookbook…</div>}
-                
+             
                 {/* NEW DASHBOARD LAYOUT FROM YOUR IMAGE */}
-            import React from 'react';
-
-
-  const CookbookPage = () => {
-  // Array to map through for generating our tabs cleanly
-  const tabs = [
-    { name: 'DASHBOARD', active: false },
-    { name: 'RECIPES', active: false },
-    { name: 'CONVERSIONS', active: true }, // The active tab
-    { name: 'TIPS', active: false },
-    { name: 'KITCHEN NOTES', active: false },
-    { name: 'PLANNER', active: false },
-  ];
-
-  // Rest of your component logic...
-};
+  
 
 
   return (
