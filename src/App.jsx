@@ -619,17 +619,17 @@ export default function Cookbook() {
       <div style={{ flex: 1, background: C.paper, borderRadius: 8, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.4)", display: "flex", flexDirection: "column", border: `2px solid ${C.spineFaint}` }}>
 
         {/* TOP BAR */}
-        <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.6rem 0.85rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
-          <span style={{ fontFamily: C.font, fontSize: "1.15rem", fontWeight: "bold", color: C.ink }}>Meagan's Cookbook</span>
+        <div style={{ background: C.paper, borderBottom: `1px solid ${C.line}`, padding: "0.7rem 1.1rem 0.6rem", display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+          <span style={{ fontFamily: C.fontSans, fontWeight: "700",fontSize: "1.05rem", color: C.ink }}>Meagan's Cookbook</span>
             <div style={{ display: "flex", gap: "0.4rem" }}>
             <button onClick={handleLogout} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Log Out</button>
             <button onClick={handlePrint} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Print Book</button>
-            
+         
                      {!nav?.recipe && !nav?.section && (activeTab === "RECIPES" || activeTab === "DASHBOARD") && (
             <button 
               onClick={() => { setActiveTab("RECIPES"); setRecipeModal({}); }} 
               disabled={sections.length === 0}
-              style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}
+              style={{ background: C.paper, border: `1px solid ${C.inkMid}`, borderRadius: 3, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}
             >
               Add Recipe
             </button>
