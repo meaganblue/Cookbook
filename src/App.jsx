@@ -137,7 +137,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
   const cellBorder = `1px solid ${C.accent}`;
   return (
     <div style={{ border, borderRadius: 3, overflow: "hidden", background: "#EDE0F5", display: "flex", flexDirection: "column", flex: flex || "none" }}>
-      <div style={{ background: "#DDD0EC", borderBottom: border, lineHeight:7, padding: "0.32rem 0.2rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.7rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "center", textTransform: "uppercase", rowHeight: 4 }}>
+      <div style={{ background: "#DDD0EC", borderBottom: border, lineHeight:4, padding: "0.32rem 0.2rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.7rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "center", textTransform: "uppercase", rowHeight: 4 }}>
         {title}
       </div>
       {isNotes ? (
@@ -644,7 +644,7 @@ export default function Cookbook() {
 
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
           {/* Left binder spine space */}
-          <div style={{ width: 20, flexShrink: 0, background: C.paper, position: 'relative', borderRight: `1px solid ${C.line}` }}>
+          <div style={{ width: 0, flexShrink: 0, background: C.paper, position: 'relative', borderRight: `1px solid ${C.line}` }}>
              {/* Optional: Add hole punch visuals here */}
           </div>
 
@@ -711,12 +711,12 @@ export default function Cookbook() {
             {/* DASHBOARD VIEW */}
             {activeTab === "🏠" && (
               <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.6rem", minHeight: "97%", rowHeight: 8, boxSizing: "border-box" }}>
-                <DashboardTable title="★  MEASUREMENT EQUIVALENTS  ★" titleCenter cols={3} rows={6} />
+                <DashboardTable title="★  COMMON SUBSTITUTIONS  ★" titleCenter cols={3} rows={6} />
                 <div style={{ display: "flex", gap: "0.6rem", flex: 1 }}>
-                  <DashboardTable title="SAFE COOKING TEMPS 🌡️" cols={2} rows={5} flex={1} />
-                  <DashboardTable title="COMMON SUBSTITUTIONS" cols={0} rows={5} flex={1} />
+                  <DashboardTable title="★ COOKING TEMPS ★" cols={2} rows={5} flex={1} />
+                  <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
                 </div>
-                <DashboardTable title="KITCHEN NOTES" titleCenter isNotes rows={6} />
+                <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} />
               </div>
             )}
 
