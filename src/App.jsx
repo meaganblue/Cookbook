@@ -738,7 +738,7 @@ export default function Cookbook() {
           </div>
 
           {/* RIGHT BINDER TABS */}
-          <div style={{ width: 30, flexShrink: 0, background: C.spine, flexDirection: "column", paddingTop: "0.2rem", paddingBottom: "0.2rem", gap: 2 }}>
+          <div style={{ width: 36, flexShrink: 0, background: C.spine, display: "flex", flexDirection: "column", paddingTop: "0.5rem", paddingBottom: "0.5rem", gap: 3 }}>
             {FIXED_TABS.map(tab => {
               const active = activeTab === tab;
               return (
@@ -746,7 +746,7 @@ export default function Cookbook() {
                   style={{ flex: 1, background: active ? C.pageInner : "#4A2A6A", border: "none", borderRadius: "0 6px 6px 0", borderLeft: active ? `3px solid ${C.accent}` : "3px solid transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: "0.1rem 0", boxShadow: active ? "2px 0 8px rgba(0,0,0,0.2)" : "none", transition: "all 0.12s", overflow: "hidden" }}
                   onMouseEnter={e => { if (!active) e.currentTarget.style.background = "#5C3A80"; }}
                   onMouseLeave={e => { if (!active) e.currentTarget.style.background = "#4A2A6A"; }}>
-                  <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.48rem", fontFamily: C.fontSans, fontWeight: "700", letterSpacing: "0.1em", textTransform: "uppercase", color: active ? C.accent : "rgba(220,205,255,0.85)", whiteSpace: "nowrap", lineHeight: 1 }}>{tab}</span>
+                  <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.48rem", fontFamily: C.fontSans, fontWeight: "700", letterSpacing: "0.1em", textTransform: "uppercase", color: active ? C.accent : "rgba(220,205,255,0.85)", whiteSpace: "wrap", lineHeight: 1 }}>{tab}</span>
                 </button>
               );
             })}
@@ -768,4 +768,4 @@ export default function Cookbook() {
       {editSecModal && <EditSectionModal section={editSecModal} onSave={renameSection} onClose={() => setEditSecModal(null)} />}
     </div>
   );
-}
+              }
