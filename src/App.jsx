@@ -793,7 +793,7 @@ export default function Cookbook() {
       
     </div>
       </div>
-    </div>
+    
     
 )};
                           
