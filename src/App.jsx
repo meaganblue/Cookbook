@@ -544,7 +544,7 @@ ${sorted.map(sec => {
 </body></html>`;
 }
 
-const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "VEGGIES", "NOODLES & RICE", "MEATS", "SLOW COOKER & CANNING"];
+const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "VEGGIES", "PASTA", "RICE", "MEATS","POULTRY & FISH", "SLOW COOKER & CANNING"];
 
 export default function Cookbook() {
   const [authUser, setAuthUser] = useState(undefined);
@@ -677,6 +677,8 @@ export default function Cookbook() {
                 
                 {/* 2. Added flex={1} to Notes so it takes up the remaining page height instead */}
                 <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={10} />
+              </div>
+      <DashboardTable title="★ ALLERGIES ★" titleCenter isNotes rows={6} />
               </div>
             )}
 
