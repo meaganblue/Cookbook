@@ -622,8 +622,8 @@ export default function Cookbook() {
         <div style={{ background: C.paper, borderBottom: `1px solid ${C.line}`, padding: "0.7rem 1.1rem 0.6rem", display: "flex", alignItems: "center", justifyContent: "space-between"}}>
           <span style={{ fontFamily: C.fontSans, fontWeight: "700",fontSize: "1.05rem", color: C.ink }}>Meagan's Cookbook</span>
             <div style={{ display: "flex", gap: "0.4rem" }}>
-            <button onClick={handleLogout} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Log Out</button>
-            <button onClick={handlePrint} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Print Book</button>
+            <button onClick={handleLogout} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 3, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Log Out</button>
+            <button onClick={handlePrint} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 3, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Print Book</button>
          
                      {!nav?.recipe && !nav?.section && (activeTab === "RECIPES" || activeTab === "DASHBOARD") && (
             <button 
@@ -757,10 +757,42 @@ export default function Cookbook() {
               );
             })}
             <div style={{ marginTop: "auto", paddingTop: "0.3rem", display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-              <button onClick={() => { const name = prompt("New section name:"); if (name?.trim()) { const s = { id: `sec-${Date.now()}`, user_id: authUser.id, name: name.trim(), position: sections.length }; dbUpsertSection(s).then(saved => setSections(prev => [...prev, saved || s])); } }}
-                style={{ width: 26, height: 26, borderRadius: "50%", background: C.accentFade, border: `2px solid ${C.accentLight}`, color: C.accent, fontSize: "1rem", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>+</button>
-              <span style={{ fontSize: "0.38rem", color: "rgba(220,205,255,0.7)", fontFamily: C.fontSans, textTransform: "uppercase", letterSpacing: "0.06em", textAlign: "center", lineHeight: 1.3, whiteSpace: "pre-line" }}>{"Add\nNew\nSection"}</span>
-            </div>
+  <button 
+    onClick={() => { setActiveTab("RECIPES"); setRecipeModal({}); }} 
+    disabled={sections.length === 0}
+    style={{ 
+      width: 26, 
+      height: 26, 
+      borderRadius: "50%", 
+      background: C.accentFade, 
+      border: `2px solid ${C.accentLight}`, 
+      color: C.accent, 
+      fontSize: "1rem", 
+      fontWeight: "bold", 
+      cursor: sections.length === 0 ? "not-allowed" : "pointer", 
+      display: "flex", 
+      alignItems: "center", 
+      justifyContent: "center", 
+      lineHeight: 1,
+      opacity: sections.length === 0 ? 0.5 : 1
+    }}
+  >
+  
+  </button>
+  <span style={{ 
+    fontSize: "0.38rem", 
+    color: "rgba(220,205,255,0.7)", 
+    fontFamily: C.fontSans, 
+    textTransform: "uppercase", 
+    letterSpacing: "0.06em", 
+    textAlign: "center", 
+    lineHeight: 1.3, 
+    whiteSpace: "pre-line" 
+  }}>
+    {"Add\nNew\nRecipe"}
+  </span>
+</div>
+
           </div>
         </div>
       </div>
