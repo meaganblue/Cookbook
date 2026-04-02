@@ -740,7 +740,7 @@ export default function Cookbook() {
       <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
     </div>
 
-    {/* Bottom Table */}
+    
     <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} />
 
   </div>
