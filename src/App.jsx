@@ -215,8 +215,8 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
         </div>
       )}
     </div>
-  );
-}
+      );
+
 
 function IngredientGrid({ value, onChange, fieldStyle }) {
   const lines = value.split("\n");
@@ -227,7 +227,6 @@ function IngredientGrid({ value, onChange, fieldStyle }) {
     let last = next.length - 1;
     while (last > 7 && !next[last].trim()) last--;
     onChange(next.slice(0, last + 1).join("\n"));
-  };
   const pairs = [];
   for (let i = 0; i < padded.length; i += 2) pairs.push([i, i + 1]);
   return (
@@ -243,10 +242,10 @@ function IngredientGrid({ value, onChange, fieldStyle }) {
             <input value={padded[ri] || ""} onChange={e => update(ri, e.target.value)} style={{ ...fieldStyle, flex: 1 }} />
           </div>
         </React.Fragment>
-      ))}
+      )})
     </div>
-  );
-}
+      
+};
 
 function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onClose }) {
   const [title, setTitle]   = useState(recipe?.title || "");
