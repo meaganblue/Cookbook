@@ -648,11 +648,7 @@ export default function Cookbook() {
              {/* Optional: Add hole punch visuals here */}
           </div>
 
-          {/* Left binder spine with hole punches */}
-          <div style={{ width: 0, flexShrink: 0, background: C.paper, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0.75rem", gap: "1.4rem" }}>
-            {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} style={{ width: 0, height: 0, borderRadius: "50%", background: C.spineFaint, boxShadow: "inset 0 1px 3px rgba(0,0,0,0.25)", flexShrink: 0 }} />
-       ))}               
+          
 
           {/* Page content */}
           <div style={{ flex: 1, overflowY: "auto", background: C.pageInner, minWidth: 0 }}>
