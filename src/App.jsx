@@ -168,9 +168,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
           ))}
         </div>
       )}
-    </div>
-  );
-}
+    
 
 
 
