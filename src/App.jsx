@@ -618,40 +618,35 @@ export default function Cookbook() {
 
       <div style={{ flex: 1, background: C.paper, borderRadius: 8, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.4)", display: "flex", flexDirection: "column", border: `2px solid ${C.spineFaint}` }}>
 
-        {/* ── TOP BAR ── */}
+  {/* ── TOP BAR ── */}
         <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.6rem 0.65rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <span style={{ fontFamily: C.font, fontSize: "1.15rem", fontWeight: "bold", color: C.ink }}>Meagan's Cookbook</span>
           <div style={{ display: "flex", gap: "0.4rem" }}>
-            <button onClick={handleLogout}
-              style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
+            <button onClick={handleLogout} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 3, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.70rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
               Log Out
             </button>
-            <button onClick={handlePrint}
-              style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
+            <button onClick={handlePrint} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 3, color: C.ink, padding: "0.15rem 0.55rem", fontSize: "0.70rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>
               Print Book
             </button>
           </div>
         </div>
- 
 
-      
-      
-      
+        {recipeModal !== null && (
+          <RecipeModal
+            recipe={recipeModal?.id ? recipeModal : null}
+            sections={sections}
+            defaultSectionId={recipeModal?._defaultSection || nav?.section?.id || sections[0]?.id}
+            onSave={saveRecipe}
+            onDelete={deleteRecipe}
+            onClose={() => setRecipeModal(null)}
+          />
+        )}
 
-      {recipeModal !== null && (
-        <RecipeModal
-          recipe={recipeModal?.id ? recipeModal : null}
-          sections={sections}
-          defaultSectionId={recipeModal?._defaultSection || nav?.section?.id || sections[0]?.id}
-          onSave={saveRecipe}
-          onDelete={deleteRecipe}
-          onClose={() => setRecipeModal(null)}
-        />
-      )}
-          </div>
-        </div>
-)}
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
+          {/* Left binder spine space */}
+          <div style={{ width: 20, flexShrink: 0, background: C.paper, position: 'relative', borderRight: `1px solid ${C.line}` }}>
+             {/* Optional: Add hole punch visuals here */}
+          </div>
 
           {/* Left binder spine with hole punches */}
           <div style={{ width: 0, flexShrink: 0, background: C.paper, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0.75rem", gap: "1.4rem" }}>
@@ -784,7 +779,8 @@ export default function Cookbook() {
     textAlign: "center", 
     lineHeight: 1.3, 
     whiteSpace: "pre-line" 
-  }}>
+  }}> 
+    +
     {"Add\nNew\nRecipe"}
   </span>
 </div>
