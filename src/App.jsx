@@ -32,6 +32,15 @@ const ruled = {
   backgroundPositionY: "36px",
 };
 
+async function dbGetSections(userId) {
+  const { data } = await supabase.from("cookbook_sections").select("*").eq("user_id", userId).order("position");
+  return data || [];
+}
+async function dbUpsertSection(sec) {
+  const { data } = await supabase.from("cookbook_sections").upsert(sec).select().single();
+  return data;
+}
+
 async function dbGetRecipes(userId) {
   const { data } = await supabase.from("cookbook_recipes").select("*").eq("user_id", userId).order("created_at", { ascending: false });
   return data || [];
@@ -293,10 +302,8 @@ export default function Cookbook() {
 
           {/* SIDEBAR TABS */}
           <div style={{ width: 30, flexShrink: 2, background: C.spine, display: "flex", flexDirection: "column", paddingTop: "0.2rem", paddingBottom: "0.5rem", gap: 1 }}>
-<SectionTable key={s.id} section={s} recipes={recipes}
-                            onSectionClick={(sec, recipe) => recipe ? goNav({ section: sec, recipe }) : goNav({ section: sec })}
-                            onEditSection={setEditSecModal}
-                            onDeleteSection={deleteSection}
+
+                            
                             onAddRecipe={secId => setRecipeModal({ _defaultSection: secId })}
                           />
 
