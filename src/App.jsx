@@ -713,7 +713,7 @@ export default function Cookbook() {
             {activeTab === "🏠" && (
               <div style={{ padding: "0.7rem", display: "flex", flexDirection: "column", gap: "0.4rem", minHeight: "97%", rowHeight: 7, boxSizing: "border-box" }}>
                 <DashboardTable title="★  COMMON SUBSTITUTIONS  ★" titleCenter cols={3} rows={5} />
-                <div style={{ display: "flex", gap: "0.4rem", flex: 1, rowHeight: 7 }}>
+              
                   <DashboardTable title="★ SAFE TEMPS ★" cols={2} rows={5} flex={1} />
                   <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
                 </div>
