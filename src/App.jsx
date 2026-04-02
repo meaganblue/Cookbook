@@ -732,7 +732,7 @@ export default function Cookbook() {
               
                   <DashboardTable title="★ SAFE TEMPS ★" cols={2} rows={5} flex={1} />
                   <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
-                </div>
+                
                 <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} />
               </div>
             )}
