@@ -170,7 +170,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
                 padding: "0.15rem 0.4rem", // Shorter vertical padding
                 width: "100%", 
                 boxSizing: "border-box", 
-                minHeight: 22 // Shorter row height
+                minHeight: 15 // Shorter row height
               }} />
           ))}
         </div>
@@ -727,18 +727,26 @@ export default function Cookbook() {
 
             {/* DASHBOARD VIEW */}
             {activeTab === "🏠" && (
-              <div style={{ padding: "0.7rem", display: "flex", flexDirection: "column", gap: "0.4rem", minHeight: "97%", rowHeight: 7, boxSizing: "border-box" }}>
-                <DashboardTable title="★  COMMON SUBSTITUTIONS  ★" titleCenter cols={3} rows={5} />
-              
-                  <DashboardTable title="★ SAFE TEMPS ★" cols={2} rows={5} flex={1} />
-                  <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
-                
-                <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} />
-              </div>
-            )}
+  <div style={{ padding: "0.7rem", display: "flex", flexDirection: "column", gap: "0.5rem", minHeight: "100%", boxSizing: "border-box" }}>
+    
+    {/* Top Table */}
+    <DashboardTable title="★ COMMON SUBSTITUTIONS ★" titleCenter cols={3} rows={5} />
+
+    {/* Middle Row - Side by Side */}
+    <div style={{ display: "flex", gap: "0.5rem", flex: 1 }}>
+      <DashboardTable title="★ SAFE TEMPS ★" cols={2} rows={5} flex={1} />
+      <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
+    </div>
+
+    {/* Bottom Table */}
+    <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} />
+
+  </div>
+)}
+
 
             {/* PLACEHOLDER TABS */}
-            {["CONVERSIONS","TIPS","KITCHEN NOTES","PLANNER"].includes(activeTab) && (
+            {["🏠","TIPS","KITCHEN NOTES","PLANNER"].includes(activeTab) && (
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", flexDirection: "column", gap: "0.5rem", color: C.inkFaint, fontFamily: C.font }}>
                 <div style={{ fontSize: "1.8rem" }}>📄</div>
                 <div style={{ fontSize: "0.9rem", fontStyle: "italic" }}>{activeTab}</div>
