@@ -741,6 +741,7 @@ export default function Cookbook() {
           </div>
 
           {/* RIGHT BINDER TABS */}
+                    {/* RIGHT BINDER TABS */}
           <div style={{ width: 30, flexShrink: 2, background: C.spine, display: "flex", flexDirection: "column", paddingTop: "0.2rem", paddingBottom: "0.5rem", gap: 3 }}>
             {FIXED_TABS.map(tab => {
               const active = activeTab === tab;
@@ -749,26 +750,7 @@ export default function Cookbook() {
                   style={{ flex: 1, background: active ? C.pageInner : "#4A2A6A", border: "none", borderRadius: "0 6px 6px 0", borderLeft: active ? `3px solid ${C.accent}` : "3px solid transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: "0.1rem 0", boxShadow: active ? "2px 0 6px rgba(0,0,0,0.2)" : "none", transition: "all 0.12s", overflow: "hidden" }}
                   onMouseEnter={e => { if (!active) e.currentTarget.style.background = "#5C3A80"; }}
                   onMouseLeave={e => { if (!active) e.currentTarget.style.background = "#4A2A6A"; }}>
-                  <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.48rem", fontFamily: C.fontSans, fontWeight: "700", letterSpacing: "0.1em", textTransform: "uppercase", color: active ? C.accent : "rgba(220,205,255,0.85)", whiteSpace: "wrap", lineHeight: 1 }}>{tab}</span>
+                  <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.42rem", fontFamily: C.fontSans, fontWeight: "700", letterSpacing: "0.05em", textTransform: "uppercase", color: active ? C.accent : "rgba(220,205,255,0.85)", whiteSpace: "normal", textAlign: "center", lineHeight: 1 }}>{tab}</span>
                 </button>
               );
             })}
-            <div style={{ marginTop: "auto", paddingTop: "0.2rem", display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-              <button
-                onClick={() => { setActiveTab("RECIPES"); setRecipeModal({}); }}
-                disabled={sections.length === 0}
-                style={{ width: 26, height: 26, borderRadius: "50%", background: C.accentFade, border: `2px solid ${C.accentLight}`, color: C.accent, fontSize: "1rem", fontWeight: "bold", cursor: sections.length === 0 ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1, opacity: sections.length === 0 ? 0.5 : 1 }}>
-                +
-              </button>
-              <span style={{ fontSize: "0.38rem", color: "rgba(220,205,255,0.7)", fontFamily: C.fontSans, textTransform: "uppercase", letterSpacing: "0.06em", textAlign: "center", lineHeight: 1.3, whiteSpace: "pre-line" }}>
-                {"Add\nNew\nRecipe"}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {editSecModal && <EditSectionModal section={editSecModal} onSave={renameSection} onClose={() => setEditSecModal(null)} />}
-    </div>
-  );
-              }
