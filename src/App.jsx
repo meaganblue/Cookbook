@@ -129,58 +129,19 @@ function AuthPage({ onAuth }) {
     </div>
   );
 }
+
 function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
   const cellCount = isNotes ? rows : cols * rows;
   const [cells, setCells] = useState(Array(cellCount).fill(""));
   const update = (i, val) => setCells(prev => { const n = [...prev]; n[i] = val; return n; });
   const border = `2px solid ${C.accent}`;
   const cellBorder = `1px solid ${C.accent}`;
-  
-  return (
-    function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
-  const cellCount = isNotes ? rows : cols * rows;
-  const [cells, setCells] = useState(Array(cellCount).fill(""));
-  const update = (i, val) => setCells(prev => { const n = [...prev]; n[i] = val; return n; });
-  const border = `2px solid ${C.accent}`;
-  const cellBorder = `1px solid ${C.accent}`;
 
   return (
-    <div style={{ border, borderRadius: 3, border: "3D2460", overflow: "hidden", background: "C.paper", display: "flex", flexDirection: "column", flex: flex || "none" }}>
-      <div style={{ background: "#DDD0EC", borderBottom: border, padding: "0.32rem 0.6rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.72rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "left", textTransform: "uppercase" }}>
-        {title}
-      </div>
-      {isNotes ? (
-        <div style={{ padding: "0.4rem 0.6rem", display: "flex", flexDirection: "column", gap: "0.3rem", background: "#FAF4FC", flex: 1 }}>
-          {Array.from({ length: rows }).map((_, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, rowHeight:8, flexShrink: 0 }}>〜</span>
-              <input value={cells[i] || ""} onChange={e => update(i, e.target.value)}
-                style={{ flex: 1, background: "transparent", border: "none", borderBottom: cellBorder, outline: "none", fontFamily: C.fontSans, fontSize: "0.82rem", color: C.inkMid, padding: "0.18rem 0" }} />
-              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, background: "#FAF4FC", flex: 1 }}>
-          {Array.from({ length: cols * rows }).map((_, i) => (
-            <input key={i} value={cells[i] || ""} onChange={e => update(i, e.target.value)}
-              style={{ background: "transparent", border: "none", borderRight: (i % cols) < (cols - 1) ? cellBorder : "none", borderBottom: i < cols * (rows - 1) ? cellBorder : "none", outline: "none", fontFamily: C.fontSans, fontSize: "0.8rem", color: C.inkMid, padding: "0.28rem 0.4rem", width: "100%", boxSizing: "border-box", minHeight: 16 }} />
-          ))}
-        </div>
-      )}
-    
-
-
-
-    
-    
-    );
     <div style={{ border, borderRadius: 3, overflow: "hidden", background: "#EDE0F5", display: "flex", flexDirection: "column", flex: flex || "none" }}>
-      {/* Tighter header */}
       <div style={{ background: "#DDD0EC", borderBottom: border, padding: "0.2rem 0.6rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.65rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "left", textTransform: "uppercase" }}>
         {title}
       </div>
-      
       {isNotes ? (
         <div style={{ padding: "0.3rem 0.6rem", display: "flex", flexDirection: "column", gap: "0.1rem", background: "#FAF4FC", flex: 1 }}>
           {Array.from({ length: rows }).map((_, i) => (
@@ -196,18 +157,18 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
         <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, background: "#FAF4FC", flex: 1 }}>
           {Array.from({ length: cols * rows }).map((_, i) => (
             <input key={i} value={cells[i] || ""} onChange={e => update(i, e.target.value)}
-              style={{ 
-                background: "transparent", 
-                border: "none", 
-                borderRight: (i % cols) < (cols - 1) ? cellBorder : "none", 
-                borderBottom: i < cols * (rows - 1) ? cellBorder : "none", 
-                outline: "none", 
-                fontFamily: C.fontSans, 
-                fontSize: "0.78rem", 
-                color: C.inkMid, 
-                padding: "0.15rem 0.3rem", // Shorter vertical padding
-                width: "100%", 
-                boxSizing: "border-box", 
+              style={{
+                background: "transparent",
+                border: "none",
+                borderRight: (i % cols) < (cols - 1) ? cellBorder : "none",
+                borderBottom: i < cols * (rows - 1) ? cellBorder : "none",
+                outline: "none",
+                fontFamily: C.fontSans,
+                fontSize: "0.78rem",
+                color: C.inkMid,
+                padding: "0.15rem 0.3rem",
+                width: "100%",
+                boxSizing: "border-box",
                 minHeight: 15,
                 maxHeight: 20
               }} />
@@ -215,8 +176,8 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
         </div>
       )}
     </div>
-      );
-
+  );
+}
 
 function IngredientGrid({ value, onChange, fieldStyle }) {
   const lines = value.split("\n");
@@ -227,6 +188,7 @@ function IngredientGrid({ value, onChange, fieldStyle }) {
     let last = next.length - 1;
     while (last > 7 && !next[last].trim()) last--;
     onChange(next.slice(0, last + 1).join("\n"));
+  };
   const pairs = [];
   for (let i = 0; i < padded.length; i += 2) pairs.push([i, i + 1]);
   return (
@@ -242,10 +204,10 @@ function IngredientGrid({ value, onChange, fieldStyle }) {
             <input value={padded[ri] || ""} onChange={e => update(ri, e.target.value)} style={{ ...fieldStyle, flex: 1 }} />
           </div>
         </React.Fragment>
-      )})
+      ))}
     </div>
-      
-};
+  );
+}
 
 function RecipeModal({ recipe, sections, defaultSectionId, onSave, onDelete, onClose }) {
   const [title, setTitle]   = useState(recipe?.title || "");
@@ -582,7 +544,7 @@ ${sorted.map(sec => {
 </body></html>`;
 }
 
-
+const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "CANNING", "SLOW COOKER", "VEGGIES", "PASTA", "RICE", "MEATS"];
 
 export default function Cookbook() {
   const [authUser, setAuthUser] = useState(undefined);
@@ -663,17 +625,14 @@ export default function Cookbook() {
     else setActiveTab("🏠");
   };
 
-  const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "CANNING", "SLOW COOKER", "VEGGIES", "PASTA", "RICE", "MEATS"];
-
   if (authUser === undefined) return <div style={{ minHeight: "100vh", background: C.paper, display: "flex", alignItems: "center", justifyContent: "center", color: C.inkMuted, fontFamily: C.fontSans }}>Opening cookbook…</div>;
   if (!authUser) return <AuthPage onAuth={setAuthUser} />;
 
   return (
     <div style={{ minHeight: "100vh", background: "#2A1545", display: "flex", flexDirection: "column", fontFamily: C.fontSans, padding: "0.5rem" }}>
-
       <div style={{ flex: 1, background: C.paper, borderRadius: 8, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.4)", display: "flex", flexDirection: "column", border: `2px solid ${C.spineFaint}` }}>
 
-  {/* ── TOP BAR ── */}
+        {/* ── TOP BAR ── */}
         <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.6rem 0.65rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <span style={{ fontFamily: C.font, fontSize: "1.15rem", fontWeight: "bold", color: C.ink }}>Meagan's Cookbook</span>
           <div style={{ display: "flex", gap: "0.4rem" }}>
@@ -698,15 +657,23 @@ export default function Cookbook() {
         )}
 
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
-          {/* Left binder spine space */}
-          <div style={{ width: 0, flexShrink: 0, background: C.paper, position: 'relative', borderRight: `1px solid ${C.line}` }}>
-             {/* Optional: Add hole punch visuals here */}
-          </div>
-
-          
+          {/* Left binder spine */}
+          <div style={{ width: 0, flexShrink: 0, background: C.paper, position: "relative", borderRight: `1px solid ${C.line}` }} />
 
           {/* Page content */}
           <div style={{ flex: 1, overflowY: "auto", background: C.pageInner, minWidth: 0 }}>
+
+            {/* DASHBOARD VIEW */}
+            {activeTab === "🏠" && (
+              <div style={{ padding: "0.7rem", display: "flex", flexDirection: "column", gap: "0.4rem", minHeight: "97%", boxSizing: "border-box" }}>
+                <DashboardTable title="★  COMMON SUBSTITUTIONS  ★" titleCenter cols={3} rows={5} />
+                <div style={{ display: "flex", gap: "0.4rem", flex: 1 }}>
+                  <DashboardTable title="★ SAFE TEMPS ★" cols={2} rows={5} flex={1} />
+                  <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
+                </div>
+                <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} />
+              </div>
+            )}
 
             {/* RECIPES VIEW */}
             {activeTab === "RECIPES" && (
@@ -762,31 +729,6 @@ export default function Cookbook() {
                 )}
               </div>
             )}
-
-            {/* DASHBOARD VIEW */}
-            
-  {activeTab === "🏠" && (
-  <div style={{ padding: "0.7rem", display: "flex", flexDirection: "column", gap: "0.4rem", minHeight: "97%", rowHeight: 7, boxSizing: "border-box" }}>
-    <DashboardTable title="★  COMMON SUBSTITUTIONS  ★" titleCenter cols={3} rows={5} />
-  
-    <div style={{ display: "flex", gap: "0.4rem", flex: 1 }}>
-      <DashboardTable title="★ SAFE TEMPS ★" cols={2} rows={5} flex={1} />
-      <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
-    </div>
-    
-    <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} />
-  </div>
-)}
-
-const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "CANNING", "SLOW COOKER", "VEGGIES", "PASTA", "RICE", "MEATS"];
-            {/* PLACEHOLDER TABS */}
-            {["🏠","TIPS","KITCHEN NOTES","PLANNER"].includes(activeTab) && (
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", flexDirection: "column", gap: "0.5rem", color: C.inkFaint, fontFamily: C.font }}>
-                <div style={{ fontSize: "1.8rem" }}>📄</div>
-                <div style={{ fontSize: "0.9rem", fontStyle: "italic" }}>{activeTab}</div>
-                <div style={{ fontSize: "0.75rem" }}>Coming soon</div>
-              </div>
-            )}
           </div>
 
           {/* RIGHT BINDER TABS */}
@@ -803,56 +745,21 @@ const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "CANN
               );
             })}
             <div style={{ marginTop: "auto", paddingTop: "0.2rem", display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-  <button 
-    onClick={() => { setActiveTab("RECIPES"); setRecipeModal({}); }} 
-    disabled={sections.length === 0}
-    style={{ 
-      width: 26, 
-      height: 26, 
-      borderRadius: "50%", 
-      background: C.accentFade, 
-      border: `2px solid ${C.accentLight}`, 
-      color: C.accent, 
-      fontSize: "1rem", 
-      fontWeight: "bold", 
-      cursor: sections.length === 0 ? "not-allowed" : "pointer", 
-      display: "flex", 
-      alignItems: "center", 
-      justifyContent: "center", 
-      lineHeight: 1,
-      opacity: sections.length === 0 ? 0.5 : 1
-    }}
-  >
-  
-  </button>
-  <span style={{ 
-    fontSize: "0.38rem", 
-    color: "rgba(220,205,255,0.7)", 
-    fontFamily: C.fontSans, 
-    textTransform: "uppercase", 
-    letterSpacing: "0.06em", 
-    textAlign: "center", 
-    lineHeight: 1.3, 
-    whiteSpace: "pre-line" 
-  }}> 
-    +
-    {"Add\nNew\nRecipe"}
-  </span>
-</div>
-
+              <button
+                onClick={() => { setActiveTab("RECIPES"); setRecipeModal({}); }}
+                disabled={sections.length === 0}
+                style={{ width: 26, height: 26, borderRadius: "50%", background: C.accentFade, border: `2px solid ${C.accentLight}`, color: C.accent, fontSize: "1rem", fontWeight: "bold", cursor: sections.length === 0 ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1, opacity: sections.length === 0 ? 0.5 : 1 }}>
+                +
+              </button>
+              <span style={{ fontSize: "0.38rem", color: "rgba(220,205,255,0.7)", fontFamily: C.fontSans, textTransform: "uppercase", letterSpacing: "0.06em", textAlign: "center", lineHeight: 1.3, whiteSpace: "pre-line" }}>
+                {"Add\nNew\nRecipe"}
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* FLOATING BUTTONS */}
-      
-          
       {editSecModal && <EditSectionModal section={editSecModal} onSave={renameSection} onClose={() => setEditSecModal(null)} />}
-    <div>
-      
     </div>
-      </div>
-    
-    
-)};
-                          
+  );
+}
