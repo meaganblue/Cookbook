@@ -732,9 +732,10 @@ export default function Cookbook() {
     
     {/* Top Table */}
     <DashboardTable title="★ COMMON SUBSTITUTIONS ★" titleCenter cols={3} rows={5} />
+  
 
     {/* Middle Row - Side by Side */}
-    <div style={{ display: "flex", gap: "0.5rem", flex: 1 }}>
+  
       <DashboardTable title="★ SAFE TEMPS ★" cols={2} rows={5} flex={1} />
       <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
     </div>
