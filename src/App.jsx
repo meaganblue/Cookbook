@@ -676,7 +676,7 @@ export default function Cookbook() {
                 </div>
                 
                 {/* 2. Added flex={1} to Notes so it takes up the remaining page height instead */}
-                <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} flex={1} />
+                <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={10} />
               </div>
             )}
 
