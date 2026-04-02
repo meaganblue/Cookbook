@@ -710,7 +710,7 @@ export default function Cookbook() {
 
             {/* DASHBOARD VIEW */}
             {activeTab === "🏠" && (
-              <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.6rem", minHeight: "100%", boxSizing: "border-box" }}>
+              <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.6rem", minHeight: "97%", rowHeight: 8, boxSizing: "border-box" }}>
                 <DashboardTable title="★  MEASUREMENT EQUIVALENTS  ★" titleCenter cols={3} rows={6} />
                 <div style={{ display: "flex", gap: "0.6rem", flex: 1 }}>
                   <DashboardTable title="SAFE COOKING TEMPS 🌡️" cols={2} rows={5} flex={1} />
