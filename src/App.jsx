@@ -321,7 +321,7 @@ export default function Cookbook() {
     </button>
   ))}
 
-  {/* The Button (Fixed) */}
+    {/* The Button */}
   <button 
     onClick={() => setRecipeModal({})} 
     style={{ 
@@ -340,11 +340,19 @@ export default function Cookbook() {
     + RECIPE
   </button>
 
+      </div> {/* Closes the Sidebar Div */}
+    </div> {/* Closes the Layout/Inner Div */}
 
-                  </div>
-      </div>
+    {/* The Modal sits inside the main wrapper, but outside the sidebar */}
+    {recipeModal && (
+      <RecipeModal 
+        recipe={recipeModal.id ? recipeModal : null} 
+        defaultSection={activeTab !== "🏠" ? activeTab : null} 
+        onSave={saveRecipe} 
+        onClose={() => setRecipeModal(null)} 
+      />
+    )}
 
-      {recipeModal && <RecipeModal recipe={recipeModal.id ? recipeModal : null} defaultSection={activeTab !== "🏠" ? activeTab : null} onSave={saveRecipe} onClose={() => setRecipeModal(null)} />}
-    </div>
+  </div> {/* Closes the Main Component Wrapper Div */}
   );
 }
