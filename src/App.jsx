@@ -176,7 +176,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
 
     
     
-    )
+    );
     <div style={{ border, borderRadius: 3, overflow: "hidden", background: "#EDE0F5", display: "flex", flexDirection: "column", flex: flex || "none" }}>
       {/* Tighter header */}
       <div style={{ background: "#DDD0EC", borderBottom: border, padding: "0.2rem 0.6rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.65rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "left", textTransform: "uppercase" }}>
