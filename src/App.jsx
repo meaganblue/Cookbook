@@ -768,42 +768,18 @@ export default function Cookbook() {
 
             {/* DASHBOARD VIEW */}
             
-  {activeTab === "🏠" && !nav?.recipe && !nav?.section && (
-              <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.6rem", height: "97%", boxSizing: "border-box" }}>
-
-                {/* ── TABLE 1: Measurement Equivalents — 3 columns ── */}
-                <DashboardTable
-                  title="★  MEASUREMENT EQUIVALENTS  ★"
-                  titleCenter
-                  cols={3}
-                  rows={6}
-                />
-
-                {/* ── ROW 2: Safe Cooking Temps + Common Substitutions ── */}
-                <div style={{ display: "flex", gap: "0.6rem", flex: 1 }}>
-                  <DashboardTable
-                    title="SAFE COOKING TEMPS 🌡️"
-                    cols={2}
-                    rows={5}
-                    flex={1}
-                  />
-                  <DashboardTable
-                    title="COMMON SUBSTITUTIONS"
-                    cols={2}
-                    rows={5}
-                    flex={1}
-                  />
-                </div>
-
-                {/* ── TABLE 3: Kitchen Notes — full-width blank ruled ── */}
-                <DashboardTable
-                  title="KITCHEN NOTES"
-                  titleCenter
-                  isNotes
-                  rows={10}
-                />
-              </div>
-            )}
+  {activeTab === "🏠" && (
+  <div style={{ padding: "0.7rem", display: "flex", flexDirection: "column", gap: "0.4rem", minHeight: "97%", rowHeight: 7, boxSizing: "border-box" }}>
+    <DashboardTable title="★  COMMON SUBSTITUTIONS  ★" titleCenter cols={3} rows={5} />
+  
+    <div style={{ display: "flex", gap: "0.4rem", flex: 1 }}>
+      <DashboardTable title="★ SAFE TEMPS ★" cols={2} rows={5} flex={1} />
+      <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
+    </div>
+    
+    <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} />
+  </div>
+)}
 
 const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "CANNING", "SLOW COOKER", "VEGGIES", "PASTA", "RICE", "MEATS"];
             {/* PLACEHOLDER TABS */}
