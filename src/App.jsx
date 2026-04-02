@@ -673,11 +673,12 @@ export default function Cookbook() {
                 <div style={{ display: "flex", gap: "0.4rem" }}>
                   <DashboardTable title="★ SAFE TEMPS ★" cols={2} rows={5} flex={1} />
                   <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
-                </div>
+                
                 
                 {/* 2. Added flex={1} to Notes so it takes up the remaining page height instead */}
                 <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={10} />
-              </div>
+              
+      
       <DashboardTable title="★ ALLERGIES ★" titleCenter isNotes rows={6} />
               </div>
             )}
