@@ -769,6 +769,6 @@ export default function Cookbook() {
       
           
       {editSecModal && <EditSectionModal section={editSecModal} onSave={renameSection} onClose={() => setEditSecModal(null)} />}
-    </div>
-  );
+    <div>
+      );
 }
