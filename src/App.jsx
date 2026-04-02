@@ -682,7 +682,7 @@ export default function Cookbook() {
       )}
           </div>
         </div>
-
+)}
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
 
           {/* Left binder spine with hole punches */}
