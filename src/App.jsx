@@ -170,7 +170,8 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
                 padding: "0.15rem 0.4rem", // Shorter vertical padding
                 width: "100%", 
                 boxSizing: "border-box", 
-                minHeight: 15 // Shorter row height
+                minHeight: 15,
+                maxHeight: 20
               }} />
           ))}
         </div>
