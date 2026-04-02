@@ -752,6 +752,6 @@ export default function Cookbook() {
                 </button>
                 
               );
-      </div>
+      <div>
             })}
      
