@@ -135,20 +135,22 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
   const update = (i, val) => setCells(prev => { const n = [...prev]; n[i] = val; return n; });
   const border = `2px solid ${C.accent}`;
   const cellBorder = `1px solid ${C.accent}`;
+  
   return (
-    
-            <div style={{ border, borderRadius: 3, overflow: "hidden", background: "#EDE0F5", display: "flex", flexDirection: "column", flex: flex || "none" }}>
-      <div style={{ background: C.paper, borderBottom: border, lineHeight:2, padding: "0.32rem 0.2rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.7rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: "center", textTransform: "uppercase", rowHeight: 4 }}>
+    <div style={{ border, borderRadius: 3, overflow: "hidden", background: "#EDE0F5", display: "flex", flexDirection: "column", flex: flex || "none" }}>
+      {/* Tighter header */}
+      <div style={{ background: "#DDD0EC", borderBottom: border, padding: "0.2rem 0.6rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.65rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "left", textTransform: "uppercase" }}>
         {title}
       </div>
+      
       {isNotes ? (
-        <div style={{ padding: "0.4rem 0.6rem", display: "flex", flexDirection: "column", gap: "0.3rem", background: "#FAF4FC", flex: 1 }}>
+        <div style={{ padding: "0.3rem 0.6rem", display: "flex", flexDirection: "column", gap: "0.1rem", background: "#FAF4FC", flex: 1 }}>
           {Array.from({ length: rows }).map((_, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
+              <span style={{ color: C.accent, fontSize: "0.7rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
               <input value={cells[i] || ""} onChange={e => update(i, e.target.value)}
-                style={{ flex: 1, background: "transparent", border: "none", borderBottom: cellBorder, outline: "none", fontFamily: C.fontSans, fontSize: "0.82rem", color: C.inkMid, padding: "0.18rem 0", rowHeight: 8 }} />
-              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
+                style={{ flex: 1, background: "transparent", border: "none", borderBottom: cellBorder, outline: "none", fontFamily: C.fontSans, fontSize: "0.78rem", color: C.inkMid, padding: "0.1rem 0" }} />
+              <span style={{ color: C.accent, fontSize: "0.7rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
             </div>
           ))}
         </div>
@@ -156,13 +158,27 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
         <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, background: "#FAF4FC", flex: 1 }}>
           {Array.from({ length: cols * rows }).map((_, i) => (
             <input key={i} value={cells[i] || ""} onChange={e => update(i, e.target.value)}
-              style={{ background: "transparent", border: "none", borderRight: (i % cols) < (cols - 1) ? cellBorder : "none", borderBottom: i < cols * (rows - 1) ? cellBorder : "none", outline: "none", fontFamily: C.fontSans, fontSize: "0.8rem", color: C.inkMid, padding: "0.28rem 0.4rem", width: "100%", boxSizing: "border-box", rowHeight: 8,  minHeight: 20 }} />
+              style={{ 
+                background: "transparent", 
+                border: "none", 
+                borderRight: (i % cols) < (cols - 1) ? cellBorder : "none", 
+                borderBottom: i < cols * (rows - 1) ? cellBorder : "none", 
+                outline: "none", 
+                fontFamily: C.fontSans, 
+                fontSize: "0.78rem", 
+                color: C.inkMid, 
+                padding: "0.15rem 0.4rem", // Shorter vertical padding
+                width: "100%", 
+                boxSizing: "border-box", 
+                minHeight: 22 // Shorter row height
+              }} />
           ))}
         </div>
       )}
     </div>
   );
 }
+
 function IngredientGrid({ value, onChange, fieldStyle }) {
   const lines = value.split("\n");
   const slots = Math.max(8, lines.length % 2 === 0 ? lines.length + 2 : lines.length + 1);
@@ -737,14 +753,14 @@ export default function Cookbook() {
               const active = activeTab === tab;
               return (
                 <button key={tab} onClick={() => { setActiveTab(tab); setNav(null); }}
-                  style={{ flex: 1, background: active ? C.pageInner : "#4A2A6A", border: "none", borderRadius: "0 6px 6px 0", borderLeft: active ? `3px solid ${C.accent}` : "3px solid transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: "0.2rem 0", boxShadow: active ? "2px 0 8px rgba(0,0,0,0.2)" : "none", transition: "all 0.12s", overflow: "hidden" }}
+                  style={{ flex: 1, background: active ? C.pageInner : "#4A2A6A", border: "none", borderRadius: "0 6px 6px 0", borderLeft: active ? `3px solid ${C.accent}` : "3px solid transparent", cursor: "pointer", display: "flex", alignItems: "center":"center", justifyContent: "center", padding: "0.1rem 0", boxShadow: active ? "2px 0 8px rgba(0,0,0,0.2)" : "none", transition: "all 0.12s", overflow: "hidden" }}
                   onMouseEnter={e => { if (!active) e.currentTarget.style.background = "#5C3A80"; }}
                   onMouseLeave={e => { if (!active) e.currentTarget.style.background = "#4A2A6A"; }}>
                   <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.48rem", fontFamily: C.fontSans, fontWeight: "700", letterSpacing: "0.1em", textTransform: "uppercase", color: active ? C.accent : "rgba(220,205,255,0.85)", whiteSpace: "nowrap", lineHeight: 1 }}>{tab}</span>
                 </button>
               );
             })}
-            <div style={{ marginTop: "auto", paddingTop: "0.3rem", display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+            <div style={{ marginTop: "auto", paddingTop: "0.2rem", display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
   <button 
     onClick={() => { setActiveTab("RECIPES"); setRecipeModal({}); }} 
     disabled={sections.length === 0}
