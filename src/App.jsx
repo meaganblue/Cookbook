@@ -663,17 +663,23 @@ export default function Cookbook() {
           {/* Page content */}
           <div style={{ flex: 1, overflowY: "auto", background: C.pageInner, minWidth: 0 }}>
 
-            {/* DASHBOARD VIEW */}
+            
+                        {/* DASHBOARD VIEW */}
             {activeTab === "🏠" && (
               <div style={{ padding: "0.7rem", display: "flex", flexDirection: "column", gap: "0.4rem", minHeight: "97%", boxSizing: "border-box" }}>
                 <DashboardTable title="★  COMMON SUBSTITUTIONS  ★" titleCenter cols={3} rows={5} />
                 
+                {/* 1. Removed flex: 1 from this div so it stops stretching vertically */}
+                <div style={{ display: "flex", gap: "0.4rem" }}>
                   <DashboardTable title="★ SAFE TEMPS ★" cols={2} rows={5} flex={1} />
                   <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
                 </div>
-                <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} />
+                
+                {/* 2. Added flex={1} to Notes so it takes up the remaining page height instead */}
+                <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} flex={1} />
               </div>
             )}
+
 
             {/* RECIPES VIEW */}
             {activeTab === "RECIPES" && (
