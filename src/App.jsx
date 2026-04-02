@@ -137,6 +137,46 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
   const cellBorder = `1px solid ${C.accent}`;
   
   return (
+    function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
+  const cellCount = isNotes ? rows : cols * rows;
+  const [cells, setCells] = useState(Array(cellCount).fill(""));
+  const update = (i, val) => setCells(prev => { const n = [...prev]; n[i] = val; return n; });
+  const border = `2px solid ${C.accent}`;
+  const cellBorder = `1px solid ${C.accent}`;
+
+  return (
+    <div style={{ border, borderRadius: 3, border: "3D2460", overflow: "hidden", background: "C.paper", display: "flex", flexDirection: "column", flex: flex || "none" }}>
+      <div style={{ background: "#DDD0EC", borderBottom: border, padding: "0.32rem 0.6rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.72rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "left", textTransform: "uppercase" }}>
+        {title}
+      </div>
+      {isNotes ? (
+        <div style={{ padding: "0.4rem 0.6rem", display: "flex", flexDirection: "column", gap: "0.3rem", background: "#FAF4FC", flex: 1 }}>
+          {Array.from({ length: rows }).map((_, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, rowHeight:8, flexShrink: 0 }}>〜</span>
+              <input value={cells[i] || ""} onChange={e => update(i, e.target.value)}
+                style={{ flex: 1, background: "transparent", border: "none", borderBottom: cellBorder, outline: "none", fontFamily: C.fontSans, fontSize: "0.82rem", color: C.inkMid, padding: "0.18rem 0" }} />
+              <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, background: "#FAF4FC", flex: 1 }}>
+          {Array.from({ length: cols * rows }).map((_, i) => (
+            <input key={i} value={cells[i] || ""} onChange={e => update(i, e.target.value)}
+              style={{ background: "transparent", border: "none", borderRight: (i % cols) < (cols - 1) ? cellBorder : "none", borderBottom: i < cols * (rows - 1) ? cellBorder : "none", outline: "none", fontFamily: C.fontSans, fontSize: "0.8rem", color: C.inkMid, padding: "0.28rem 0.4rem", width: "100%", boxSizing: "border-box", minHeight: 16 }} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+}
+
+    
+    
+    
     <div style={{ border, borderRadius: 3, overflow: "hidden", background: "#EDE0F5", display: "flex", flexDirection: "column", flex: flex || "none" }}>
       {/* Tighter header */}
       <div style={{ background: "#DDD0EC", borderBottom: border, padding: "0.2rem 0.6rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.65rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "left", textTransform: "uppercase" }}>
@@ -727,23 +767,45 @@ export default function Cookbook() {
             )}
 
             {/* DASHBOARD VIEW */}
-            {activeTab === "🏠" && (
-  <div style={{ padding: "0.5rem", display: "flex", flexDirection: "column", gap: "0.5rem", minHeight: "100%", boxSizing: "border-box" }}>
-    
-    {/* Top Table */}
-    <DashboardTable title="★ COMMON SUBSTITUTIONS ★" titleCenter cols={3} rows={5} />
-  
+            
+  {activeTab === "🏠" && !nav?.recipe && !nav?.section && (
+              <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.6rem", height: "97%", boxSizing: "border-box" }}>
 
-    {/* Middle Row - Side by Side */}
-  
-      <DashboardTable title="★ SAFE TEMPS ★" titleCenter cols={2} rows={5} />
-      <DashboardTable title="★ EQUIVALENTS ★" titleCenter cols={3} rows={5} />
-   <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} />
+                {/* ── TABLE 1: Measurement Equivalents — 3 columns ── */}
+                <DashboardTable
+                  title="★  MEASUREMENT EQUIVALENTS  ★"
+                  titleCenter
+                  cols={3}
+                  rows={6}
+                />
 
-  </div>
-)}
+                {/* ── ROW 2: Safe Cooking Temps + Common Substitutions ── */}
+                <div style={{ display: "flex", gap: "0.6rem", flex: 1 }}>
+                  <DashboardTable
+                    title="SAFE COOKING TEMPS 🌡️"
+                    cols={2}
+                    rows={5}
+                    flex={1}
+                  />
+                  <DashboardTable
+                    title="COMMON SUBSTITUTIONS"
+                    cols={2}
+                    rows={5}
+                    flex={1}
+                  />
+                </div>
 
+                {/* ── TABLE 3: Kitchen Notes — full-width blank ruled ── */}
+                <DashboardTable
+                  title="KITCHEN NOTES"
+                  titleCenter
+                  isNotes
+                  rows={10}
+                />
+              </div>
+            )}
 
+const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "CANNING", "SLOW COOKER", "VEGGIES", "PASTA", "RICE", "MEATS"];
             {/* PLACEHOLDER TABS */}
             {["🏠","TIPS","KITCHEN NOTES","PLANNER"].includes(activeTab) && (
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", flexDirection: "column", gap: "0.5rem", color: C.inkFaint, fontFamily: C.font }}>
