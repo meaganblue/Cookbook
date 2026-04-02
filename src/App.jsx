@@ -292,14 +292,17 @@ export default function Cookbook() {
           </div>
 
           {/* SIDEBAR TABS */}
-          <div style={{ width: 32, background: C.spine, display: "flex", flexDirection: "column", gap: 2, paddingTop: "0.2rem" }}>
+          <div style={{ width: 30, flexShrink: 2, background: C.spine, display: "flex", flexDirection: "column", paddingTop: "0.2rem", paddingBottom: "0.5rem", gap: 1 }}>
+
             {FIXED_TABS.map(tab => (
               <button key={tab} onClick={() => { setActiveTab(tab); setSearch(""); }}
                 style={{ flex: 1, background: activeTab === tab ? C.pageInner : "#4A2A6A", border: "none", borderRadius: "0 6px 6px 0", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                 <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.45rem", fontWeight: "bold", color: activeTab === tab ? C.accent : "#C9B8FF" }}>{tab}</span>
               </button>
-            ))}
-            <button onClick={() => onAddRecipe(section.id)} style={{ background: C.accentFade, border: `1px solid ${C.accent}`, borderRadius: 3, color: C.accent, padding: "0.16rem 0.45rem", fontSize: "0.62rem", fontFamily: C.fontSans, cursor: "pointer", fontWeight: "bold" }}>+ Recipe</button>
+            <button onClick={addRecipe}
+              style={{ background: C.accent, border: "none", borderRadius: 18, color: "#fff", padding: "0.28rem 0.65rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "bold", cursor: "pointer" }}>
+              + RECIPE
+            </button>
           </div>
         </div>
       </div>
