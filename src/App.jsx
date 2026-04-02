@@ -752,5 +752,8 @@ export default function Cookbook() {
                   onMouseLeave={e => { if (!active) e.currentTarget.style.background = "#4A2A6A"; }}>
                   <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.42rem", fontFamily: C.fontSans, fontWeight: "700", letterSpacing: "0.05em", textTransform: "uppercase", color: active ? C.accent : "rgba(220,205,255,0.85)", whiteSpace: "normal", textAlign: "center", lineHeight: 1 }}>{tab}</span>
                 </button>
-              );
-            })}
+                </div> 
+            );    
+              )}
+      
+            
