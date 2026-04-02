@@ -738,7 +738,7 @@ export default function Cookbook() {
           </div>
 
           {/* RIGHT BINDER TABS */}
-          <div style={{ width: 36, flexShrink: 0, background: C.spine, display: "flex", flexDirection: "column", paddingTop: "0.2rem", paddingBottom: "0.5rem", gap: 3 }}>
+          <div style={{ width: 30, flexShrink: 0, background: C.spine, display: "flex", flexDirection: "column", paddingTop: "0.2rem", paddingBottom: "0.5rem", gap: 3 }}>
             {FIXED_TABS.map(tab => {
               const active = activeTab === tab;
               return (
