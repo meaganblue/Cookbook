@@ -621,7 +621,7 @@ export default function Cookbook() {
         {/* TOP BAR */}
         <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.6rem 0.85rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <span style={{ fontFamily: C.font, fontSize: "1.15rem", fontWeight: "bold", color: C.ink }}>Meagan's Cookbook</span>
-          <          <div style={{ display: "flex", gap: "0.4rem" }}>
+            <div style={{ display: "flex", gap: "0.4rem" }}>
             <button onClick={handleLogout} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Log Out</button>
             <button onClick={handlePrint} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Print Book</button>
             
