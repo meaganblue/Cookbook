@@ -236,6 +236,15 @@ export default function Cookbook() {
     await dbUpsertRecipe(rec);
     dbGetRecipes(authUser.id).then(setRecipes);
     setRecipeModal(null);
+  
+    const handlePrint = () => {
+    const html = generatePrintHTML(sections, recipes);
+    const w = window.open("", "_blank");
+    w.document.write(html);
+    w.document.close();
+    setTimeout(() => w.print(), 600);
+  };
+
   };
 
   const filtered = search 
@@ -290,7 +299,7 @@ export default function Cookbook() {
                 <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.45rem", fontWeight: "bold", color: activeTab === tab ? C.accent : "#C9B8FF" }}>{tab}</span>
               </button>
             ))}
-            <button onClick={() => setRecipeModal({})} style={{ height: 30, background: C.accentFade, border: "none", margin: "5px", borderRadius: "50%", cursor: "pointer", fontWeight: "bold", color: C.accent }}>+</button>
+            <button onClick={() => onAddRecipe(section.id)} style={{ background: C.accentFade, border: `1px solid ${C.accent}`, borderRadius: 3, color: C.accent, padding: "0.16rem 0.45rem", fontSize: "0.62rem", fontFamily: C.fontSans, cursor: "pointer", fontWeight: "bold" }}>+ Recipe</button>
           </div>
         </div>
       </div>
