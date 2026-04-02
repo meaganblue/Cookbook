@@ -301,11 +301,12 @@ export default function Cookbook() {
           </div>
 
           {/* SIDEBAR TABS */}
-          <div style={{ width: 30, flexShrink: 2, background: C.spine, display: "flex", flexDirection: "column", paddingTop: "0.2rem", paddingBottom: "0.5rem", gap: 1 }}>
+         <button 
+  onClick={() => setRecipeModal({})} // This calls the state setter directly
+  style={{  width: 30, flexShrink: 2, background: C.spine, display: "flex", flexDirection: "column", paddingTop: "0.2rem", paddingBottom: "0.5rem", gap: 1 }}>
 
                             
-                            onAddRecipe={secId => setRecipeModal({ _defaultSection: secId })}
-                          />
+                            
 
   {/* 1. Map starts here */}
   {FIXED_TABS.map(tab => (
@@ -318,11 +319,11 @@ export default function Cookbook() {
         {tab}
       </span>
     </button>
-  ))} {/* <--- 2. Map MUST close here */}
+  ))}
 
-  {/* 3. The Add Recipe button sits below the map */}
+  {/* The Button (Fixed) */}
   <button 
-    onClick={addRecipe}
+    onClick={() => setRecipeModal({})} 
     style={{ 
       background: C.accent, 
       border: "none", 
@@ -333,12 +334,11 @@ export default function Cookbook() {
       fontFamily: C.fontSans, 
       fontWeight: "bold", 
       cursor: "pointer",
-      marginTop: "10px" // Optional: gives it some space from the tabs
+      marginTop: "10px"
     }}
-  > {/* <--- 4. Added the missing '>' here */}
+  >
     + RECIPE
   </button>
-
 </div>
 
                   </div>
