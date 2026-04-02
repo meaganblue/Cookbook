@@ -137,7 +137,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
   const cellBorder = `1px solid ${C.accent}`;
   return (
     <div style={{ border, borderRadius: 3, overflow: "hidden", background: "#EDE0F5", display: "flex", flexDirection: "column", flex: flex || "none" }}>
-      <div style={{ background: "#DDD0EC", borderBottom: border, lineHeight:7, padding: "0.32rem 0.6rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.7rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "center", textTransform: "uppercase", rowHeight: 4 }}>
+      <div style={{ background: "#DDD0EC", borderBottom: border, lineHeight:7, padding: "0.32rem 0.2rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.7rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "center", textTransform: "uppercase", rowHeight: 4 }}>
         {title}
       </div>
       {isNotes ? (
@@ -714,7 +714,7 @@ export default function Cookbook() {
                 <DashboardTable title="★  MEASUREMENT EQUIVALENTS  ★" titleCenter cols={3} rows={6} />
                 <div style={{ display: "flex", gap: "0.6rem", flex: 1 }}>
                   <DashboardTable title="SAFE COOKING TEMPS 🌡️" cols={2} rows={5} flex={1} />
-                  <DashboardTable title="COMMON SUBSTITUTIONS" cols={2} rows={5} flex={1} />
+                  <DashboardTable title="COMMON SUBSTITUTIONS" cols={0} rows={5} flex={1} />
                 </div>
                 <DashboardTable title="KITCHEN NOTES" titleCenter isNotes rows={6} />
               </div>
