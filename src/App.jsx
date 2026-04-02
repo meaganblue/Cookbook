@@ -146,7 +146,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
               <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
               <input value={cells[i] || ""} onChange={e => update(i, e.target.value)}
-                style={{ flex: 1, background: "transparent", border: "none", borderBottom: cellBorder, outline: "none", fontFamily: C.fontSans, fontSize: "0.82rem", color: C.inkMid, padding: "0.18rem 0" }} />
+                style={{ flex: 1, background: "transparent", border: "none", borderBottom: cellBorder, outline: "none", fontFamily: C.fontSans, fontSize: "0.82rem", color: C.inkMid, padding: "0.18rem 0", rowHeight: 8 }} />
               <span style={{ color: C.accent, fontSize: "0.75rem", opacity: 0.5, flexShrink: 0 }}>〜</span>
             </div>
           ))}
@@ -539,7 +539,7 @@ export default function Cookbook() {
   const [editSecModal, setEditSecModal] = useState(null);
   const [addSecName, setAddSecName] = useState("");
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState("DASHBOARD");
+  const [activeTab, setActiveTab] = useState("🏠");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setAuthUser(session?.user || null));
@@ -605,7 +605,7 @@ export default function Cookbook() {
   const goNav = (navVal) => {
     setNav(navVal);
     if (navVal) setActiveTab("RECIPES");
-    else setActiveTab("DASHBOARD");
+    else setActiveTab("🏠");
   };
 
   const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "CANNING", "SLOW COOKER", "VEGGIES", "PASTA", "RICE", "MEATS"];
@@ -709,7 +709,7 @@ export default function Cookbook() {
             )}
 
             {/* DASHBOARD VIEW */}
-            {activeTab === "DASHBOARD" && (
+            {activeTab === "🏠" && (
               <div style={{ padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.6rem", minHeight: "100%", boxSizing: "border-box" }}>
                 <DashboardTable title="★  MEASUREMENT EQUIVALENTS  ★" titleCenter cols={3} rows={6} />
                 <div style={{ display: "flex", gap: "0.6rem", flex: 1 }}>
