@@ -167,7 +167,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
                 fontFamily: C.fontSans, 
                 fontSize: "0.78rem", 
                 color: C.inkMid, 
-                padding: "0.15rem 0.4rem", // Shorter vertical padding
+                padding: "0.15rem 0.3rem", // Shorter vertical padding
                 width: "100%", 
                 boxSizing: "border-box", 
                 minHeight: 15,
@@ -728,7 +728,7 @@ export default function Cookbook() {
 
             {/* DASHBOARD VIEW */}
             {activeTab === "🏠" && (
-  <div style={{ padding: "0.7rem", display: "flex", flexDirection: "column", gap: "0.5rem", minHeight: "100%", boxSizing: "border-box" }}>
+  <div style={{ padding: "0.5rem", display: "flex", flexDirection: "column", gap: "0.5rem", minHeight: "100%", boxSizing: "border-box" }}>
     
     {/* Top Table */}
     <DashboardTable title="★ COMMON SUBSTITUTIONS ★" titleCenter cols={3} rows={5} />
@@ -736,12 +736,9 @@ export default function Cookbook() {
 
     {/* Middle Row - Side by Side */}
   
-      <DashboardTable title="★ SAFE TEMPS ★" cols={2} rows={5} flex={1} />
-      <DashboardTable title="★ EQUIVALENTS ★" cols={3} rows={5} flex={1} />
-    
-
-    
-    <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} />
+      <DashboardTable title="★ SAFE TEMPS ★" titleCenter cols={2} rows={5} />
+      <DashboardTable title="★ EQUIVALENTS ★" titleCenter cols={3} rows={5} />
+   <DashboardTable title="★ NOTES ★" titleCenter isNotes rows={6} />
 
   </div>
 )}
