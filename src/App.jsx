@@ -299,7 +299,7 @@ export default function Cookbook() {
                 style={{ flex: 1, background: activeTab === tab ? C.pageInner : "#4A2A6A", border: "none", borderRadius: "0 6px 6px 0", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                 <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.45rem", fontWeight: "bold", color: activeTab === tab ? C.accent : "#C9B8FF" }}>{tab}</span>
               </button>
-            <button  onClick={addRecipe}
+            <button onClick={addRecipe}
   style={{ 
     background: C.accent, 
     border: "none", 
