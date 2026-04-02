@@ -137,7 +137,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
   const cellBorder = `1px solid ${C.accent}`;
   return (
     <div style={{ border, borderRadius: 3, overflow: "hidden", background: "#EDE0F5", display: "flex", flexDirection: "column", flex: flex || "none" }}>
-      <div style={{ background: "#DDD0EC", borderBottom: border, padding: "0.32rem 0.6rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.7rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "left", textTransform: "uppercase", rowHeight: 8 }}>
+      <div style={{ background: "#DDD0EC", borderBottom: border, lineHeight:7, padding: "0.32rem 0.6rem", fontFamily: C.fontSans, fontWeight: "700", fontSize: "0.7rem", letterSpacing: "0.1em", color: "#3D2460", textAlign: titleCenter ? "center" : "center", textTransform: "uppercase", rowHeight: 8 }}>
         {title}
       </div>
       {isNotes ? (
@@ -155,7 +155,7 @@ function DashboardTable({ title, titleCenter, cols, rows, flex, isNotes }) {
         <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, background: "#FAF4FC", flex: 1 }}>
           {Array.from({ length: cols * rows }).map((_, i) => (
             <input key={i} value={cells[i] || ""} onChange={e => update(i, e.target.value)}
-              style={{ background: "transparent", border: "none", borderRight: (i % cols) < (cols - 1) ? cellBorder : "none", borderBottom: i < cols * (rows - 1) ? cellBorder : "none", outline: "none", fontFamily: C.fontSans, fontSize: "0.8rem", color: C.inkMid, padding: "0.28rem 0.4rem", width: "100%", boxSizing: "border-box", minHeight: 26 }} />
+              style={{ background: "transparent", border: "none", borderRight: (i % cols) < (cols - 1) ? cellBorder : "none", borderBottom: i < cols * (rows - 1) ? cellBorder : "none", outline: "none", fontFamily: C.fontSans, fontSize: "0.8rem", color: C.inkMid, padding: "0.28rem 0.4rem", width: "100%", boxSizing: "border-box", rowHeight: 8,  minHeight: 20 }} />
           ))}
         </div>
       )}
