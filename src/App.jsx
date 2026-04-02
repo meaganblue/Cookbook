@@ -544,7 +544,7 @@ ${sorted.map(sec => {
 </body></html>`;
 }
 
-const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "CANNING", "SLOW COOKER", "VEGGIES", "PASTA", "RICE", "MEATS"];
+const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "VEGGIES", "NOODLES & RICE", "MEATS", "SLOW COOKER & CANNING"];
 
 export default function Cookbook() {
   const [authUser, setAuthUser] = useState(undefined);
