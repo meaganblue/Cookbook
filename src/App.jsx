@@ -824,12 +824,17 @@ export default function Cookbook() {
           </div>
         </div>
       </div>
-);
+
       {/* FLOATING BUTTONS */}
       
           
       {editSecModal && <EditSectionModal section={editSecModal} onSave={renameSection} onClose={() => setEditSecModal(null)} />}
     <div>
-      );
+      
     </div>
+);
 }
+      
+
+
+
