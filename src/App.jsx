@@ -39,9 +39,6 @@ async function dbUpsertSection(sec) {
   const { data } = await supabase.from("cookbook_sections").upsert(sec).select().single();
   return data;
 }
-async function dbDeleteSection(id) {
-  await supabase.from("cookbook_sections").delete().eq("id", id);
-}
 async function dbGetRecipes(userId) {
   const { data } = await supabase.from("cookbook_recipes").select("*").eq("user_id", userId).order("created_at", { ascending: false });
   return data || [];
@@ -622,15 +619,33 @@ export default function Cookbook() {
         <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.6rem 0.85rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <span style={{ fontFamily: C.font, fontSize: "1.15rem", fontWeight: "bold", color: C.ink }}>Meagan's Cookbook</span>
           <div style={{ display: "flex", gap: "0.4rem" }}>
-            <button onClick={handleLogout} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Log Out</button>
-            <button onClick={handlePrint} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Print Book</button>
+            <button onClick={handleLogout} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Log Out</button>
+            <button onClick={handlePrint} style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Print Book</button>
+         {!nav?.recipe && !nav?.section && (activeTab === "RECIPES" || activeTab === "DASHBOARD") && (
+        <button onClick={  setActiveTab("RECIPES"); setRecipeModal({}); }} disabled={sections.length === 0}
+          style={{ background: C.paper, border: `1.5px solid ${C.inkMid}`, borderRadius: 4, color: C.ink, padding: "0.25rem 0.75rem", fontSize: "0.65rem", fontFamily: C.fontSans, fontWeight: "600", cursor: "pointer" }}>Add Recipe</button>
+          </button>
+      </div>
+      
+      )}
+
+      {recipeModal !== null && (
+        <RecipeModal
+          recipe={recipeModal?.id ? recipeModal : null}
+          sections={sections}
+          defaultSectionId={recipeModal?._defaultSection || nav?.section?.id || sections[0]?.id}
+          onSave={saveRecipe}
+          onDelete={deleteRecipe}
+          onClose={() => setRecipeModal(null)}
+        />
+      )}
           </div>
         </div>
 
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
 
           {/* Left spine */}
-          <div style={{ width: 20, flexShrink: 0, background: C.spine, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "1rem", gap: "1.5rem" }}>
+          <div style={{ width: 0, flexShrink: 0, background: C.spine, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "1rem", gap: "1.5rem" }}>
             {Array.from({ length: 9 }).map((_, i) => (
               <div key={i} style={{ width: 12, height: 12, borderRadius: "50%", background: "#1A0A2E", border: `1.5px solid ${C.spineLight}`, boxShadow: "inset 0 1px 3px rgba(0,0,0,0.5)", flexShrink: 0 }} />
             ))}
@@ -739,33 +754,8 @@ export default function Cookbook() {
       </div>
 
       {/* FLOATING BUTTONS */}
-      {!nav?.recipe && !nav?.section && (activeTab === "RECIPES" || activeTab === "DASHBOARD") && (
-        <div style={{ position: "fixed", bottom: "1.2rem", right: "3rem", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.5rem", zIndex: 50 }}>
-          <button onClick={() => { setActiveTab("RECIPES"); setRecipeModal({}); }} disabled={sections.length === 0}
-            style={{ background: C.accent, border: "none", borderRadius: 22, color: "#fff", padding: "0.55rem 1.1rem", fontSize: "0.82rem", fontFamily: C.fontSans, fontWeight: "700", cursor: sections.length === 0 ? "not-allowed" : "pointer", opacity: sections.length === 0 ? 0.5 : 1, boxShadow: "0 3px 12px rgba(92,61,143,0.5)" }}>
-            + Add Recipe
-          </button>
-          <div style={{ display: "flex", gap: "0.35rem", alignItems: "center", background: C.pageInner, border: `1px solid ${C.spineFaint}`, borderRadius: 22, padding: "0.38rem 0.5rem 0.38rem 0.85rem", boxShadow: "0 2px 8px rgba(92,61,143,0.2)" }}>
-            <input value={addSecName} onChange={e => setAddSecName(e.target.value)} onKeyDown={e => e.key === "Enter" && addSection()} placeholder="New section…"
-              style={{ background: "transparent", border: "none", outline: "none", color: C.ink, fontSize: "0.78rem", fontFamily: C.fontSans, width: 110 }} />
-            <button onClick={addSection} disabled={!addSecName.trim()}
-              style={{ background: C.accent, border: "none", borderRadius: 18, color: "#fff", padding: "0.28rem 0.65rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "bold", cursor: addSecName.trim() ? "pointer" : "not-allowed", opacity: addSecName.trim() ? 1 : 0.5 }}>
-              + Section
-            </button>
-          </div>
-        </div>
-      )}
-
-      {recipeModal !== null && (
-        <RecipeModal
-          recipe={recipeModal?.id ? recipeModal : null}
-          sections={sections}
-          defaultSectionId={recipeModal?._defaultSection || nav?.section?.id || sections[0]?.id}
-          onSave={saveRecipe}
-          onDelete={deleteRecipe}
-          onClose={() => setRecipeModal(null)}
-        />
-      )}
+      
+          
       {editSecModal && <EditSectionModal section={editSecModal} onSave={renameSection} onClose={() => setEditSecModal(null)} />}
     </div>
   );
