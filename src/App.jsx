@@ -25,7 +25,7 @@ const C = {
   fontSans:    "'Trebuchet MS', 'Gill Sans', Calibri, sans-serif",
 };
 
-const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "VEGGIES", "PASTA", "RICE", "MEATS","POULTRY & FISH", "SLOW COOKER & CANNING"];
+const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "VEGGIES", "PASTA", "RICE", "MEATS", "POULTRY & FISH", "SLOW COOKER & CANNING"];
 
 const ruled = {
   backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent 29px, ${C.line} 29px, ${C.line} 30px)`,
@@ -164,15 +164,15 @@ function IngredientGrid({ value, onChange, fieldStyle }) {
 }
 
 function RecipeModal({ recipe, onSave, onDelete, onClose, defaultSection }) {
-  const [title, setTitle]   = useState(recipe?.title || "");
+  const [title, setTitle]     = useState(recipe?.title || "");
   const [secName, setSecName] = useState(recipe?.section_name || defaultSection || FIXED_TABS[1]);
-  const [ings, setIngs]     = useState((recipe?.ingredients || []).join("\n"));
-  const [method, setMethod] = useState((recipe?.method || []).join("\n"));
-  const [temp, setTemp]     = useState(recipe?.temp || "");
-  const [time, setTime]     = useState(recipe?.cook_time || "");
-  const [serves, setServes] = useState(recipe?.servings || "");
-  const [notes, setNotes]   = useState(recipe?.notes || "");
-  const [rating, setRating] = useState(recipe?.rating || 0);
+  const [ings, setIngs]       = useState((recipe?.ingredients || []).join("\n"));
+  const [method, setMethod]   = useState((recipe?.method || []).join("\n"));
+  const [temp, setTemp]       = useState(recipe?.temp || "");
+  const [time, setTime]       = useState(recipe?.cook_time || "");
+  const [serves, setServes]   = useState(recipe?.servings || "");
+  const [notes, setNotes]     = useState(recipe?.notes || "");
+  const [rating, setRating]   = useState(recipe?.rating || 0);
   const [showPicker, setShowPicker] = useState(false);
 
   const save = () => {
@@ -199,20 +199,20 @@ function RecipeModal({ recipe, onSave, onDelete, onClose, defaultSection }) {
           <input placeholder="Recipe Name" value={title} onChange={e => setTitle(e.target.value)} style={{ ...uLine, fontSize: "1.1rem" }} />
           <IngredientGrid value={ings} onChange={setIngs} fieldStyle={uLine} />
           <div style={{ display: "flex", gap: "1rem" }}>
-             <div style={{ flex: 1 }}>
-                <input placeholder="Temp" value={temp} onChange={e => setTemp(e.target.value)} style={uLine} />
-                <input placeholder="Cook Time" value={time} onChange={e => setTime(e.target.value)} style={uLine} />
-             </div>
-             <div style={{ position: "relative" }}>
-                <button onClick={() => setShowPicker(!showPicker)} style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 4, padding: "0.5rem 1rem", cursor: "pointer" }}>{secName}</button>
-                {showPicker && (
-                  <div style={{ position: "absolute", bottom: "100%", right: 0, background: "#fff", border: `1px solid ${C.line}`, borderRadius: 4, zIndex: 10, maxHeight: 200, overflowY: "auto" }}>
-                    {FIXED_TABS.slice(1).map(t => (
-                      <button key={t} onClick={() => { setSecName(t); setShowPicker(false); }} style={{ display: "block", width: "100%", padding: "0.5rem", border: "none", background: "none", cursor: "pointer", textAlign: "left" }}>{t}</button>
-                    ))}
-                  </div>
-                )}
-             </div>
+            <div style={{ flex: 1 }}>
+              <input placeholder="Temp" value={temp} onChange={e => setTemp(e.target.value)} style={uLine} />
+              <input placeholder="Cook Time" value={time} onChange={e => setTime(e.target.value)} style={uLine} />
+            </div>
+            <div style={{ position: "relative" }}>
+              <button onClick={() => setShowPicker(!showPicker)} style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 4, padding: "0.5rem 1rem", cursor: "pointer" }}>{secName}</button>
+              {showPicker && (
+                <div style={{ position: "absolute", bottom: "100%", right: 0, background: "#fff", border: `1px solid ${C.line}`, borderRadius: 4, zIndex: 10, maxHeight: 200, overflowY: "auto" }}>
+                  {FIXED_TABS.slice(1).map(t => (
+                    <button key={t} onClick={() => { setSecName(t); setShowPicker(false); }} style={{ display: "block", width: "100%", padding: "0.5rem", border: "none", background: "none", cursor: "pointer", textAlign: "left" }}>{t}</button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <textarea placeholder="Instructions..." value={method} onChange={e => setMethod(e.target.value)} style={{ ...uLine, height: 80, resize: "none" }} />
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -226,11 +226,11 @@ function RecipeModal({ recipe, onSave, onDelete, onClose, defaultSection }) {
 }
 
 export default function Cookbook() {
-  const [authUser, setAuthUser] = useState(undefined);
-  const [recipes, setRecipes]   = useState([]);
-  const [activeTab, setActiveTab] = useState("🏠");
+  const [authUser, setAuthUser]       = useState(undefined);
+  const [recipes, setRecipes]         = useState([]);
+  const [activeTab, setActiveTab]     = useState("🏠");
   const [recipeModal, setRecipeModal] = useState(null);
-  const [search, setSearch] = useState("");
+  const [search, setSearch]           = useState("");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setAuthUser(session?.user || null));
@@ -245,18 +245,9 @@ export default function Cookbook() {
     await dbUpsertRecipe(rec);
     dbGetRecipes(authUser.id).then(setRecipes);
     setRecipeModal(null);
-  
-    const handlePrint = () => {
-    const html = generatePrintHTML(sections, recipes);
-    const w = window.open("", "_blank");
-    w.document.write(html);
-    w.document.close();
-    setTimeout(() => w.print(), 600);
   };
 
-  };
-
-  const filtered = search 
+  const filtered = search
     ? recipes.filter(r => r.title.toLowerCase().includes(search.toLowerCase()))
     : recipes.filter(r => r.section_name === activeTab);
 
@@ -266,7 +257,7 @@ export default function Cookbook() {
   return (
     <div style={{ minHeight: "100vh", background: "#2A1545", padding: "0.5rem", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1, background: C.paper, borderRadius: 8, overflow: "hidden", display: "flex", flexDirection: "column", border: `2px solid ${C.spineFaint}` }}>
-        
+
         {/* TOP BAR */}
         <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.6rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontFamily: C.font, fontWeight: "bold", fontSize: "1.2rem" }}>Meagan's Cookbook</span>
@@ -274,6 +265,7 @@ export default function Cookbook() {
         </div>
 
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
+
           {/* MAIN CONTENT AREA */}
           <div style={{ flex: 1, overflowY: "auto", background: C.pageInner, padding: "0.7rem" }}>
             {activeTab === "🏠" ? (
@@ -301,58 +293,38 @@ export default function Cookbook() {
           </div>
 
           {/* SIDEBAR TABS */}
-         <button 
-  onClick={() => setRecipeModal({})} // This calls the state setter directly
-  style={{  width: 30, flexShrink: 2, background: C.spine, display: "flex", flexDirection: "column", paddingTop: "0.2rem", paddingBottom: "0.5rem", gap: 1 }}>
+          <div style={{ width: 36, flexShrink: 0, background: C.spine, display: "flex", flexDirection: "column", paddingTop: "0.2rem", paddingBottom: "0.5rem", gap: 1 }}>
+            {FIXED_TABS.map(tab => (
+              <button
+                key={tab}
+                onClick={() => { setActiveTab(tab); setSearch(""); }}
+                style={{ flex: 1, background: activeTab === tab ? C.pageInner : "#4A2A6A", border: "none", borderRadius: "0 6px 6px 0", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}
+              >
+                <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.45rem", fontWeight: "bold", color: activeTab === tab ? C.accent : "#C9B8FF" }}>
+                  {tab}
+                </span>
+              </button>
+            ))}
+            <button
+              onClick={() => setRecipeModal({})}
+              style={{ background: C.accent, border: "none", borderRadius: "18px", color: "#fff", padding: "0.28rem 0.65rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "bold", cursor: "pointer", marginTop: "10px" }}
+            >
+              + RECIPE
+            </button>
+          </div>
 
-                            
-                            
+        </div>
 
-  {/* 1. Map starts here */}
-  {FIXED_TABS.map(tab => (
-    <button 
-      key={tab} 
-      onClick={() => { setActiveTab(tab); setSearch(""); }}
-      style={{ flex: 1, background: activeTab === tab ? C.pageInner : "#4A2A6A", border: "none", borderRadius: "0 6px 6px 0", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}
-    >
-      <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.45rem", fontWeight: "bold", color: activeTab === tab ? C.accent : "#C9B8FF" }}>
-        {tab}
-      </span>
-    </button>
-  ))}
+        {recipeModal && (
+          <RecipeModal
+            recipe={recipeModal.id ? recipeModal : null}
+            defaultSection={activeTab !== "🏠" ? activeTab : null}
+            onSave={saveRecipe}
+            onClose={() => setRecipeModal(null)}
+          />
+        )}
 
-    {/* The Button */}
-  <button 
-    onClick={() => setRecipeModal({})} 
-    style={{ 
-      background: C.accent, 
-      border: "none", 
-      borderRadius: "18px", 
-      color: "#fff", 
-      padding: "0.28rem 0.65rem", 
-      fontSize: "0.75rem", 
-      fontFamily: C.fontSans, 
-      fontWeight: "bold", 
-      cursor: "pointer",
-      marginTop: "10px"
-    }}
-  >
-    + RECIPE
-  </button>
-
-      </div> {/* Closes the Sidebar Div */}
-    </div> {/* Closes the Layout/Inner Div */}
-
-    {/* The Modal sits inside the main wrapper, but outside the sidebar */}
-    {recipeModal && (
-      <RecipeModal 
-        recipe={recipeModal.id ? recipeModal : null} 
-        defaultSection={activeTab !== "🏠" ? activeTab : null} 
-        onSave={saveRecipe} 
-        onClose={() => setRecipeModal(null)} 
-      />
-    )}
-
-  </div> {/* Closes the Main Component Wrapper Div */}
+      </div>
+    </div>
   );
 }
