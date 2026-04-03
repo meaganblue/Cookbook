@@ -154,8 +154,8 @@ function IngredientGrid({ value, onChange, fieldStyle }) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.2rem 1.2rem" }}>
       {padded.map((v, i) => (
-        <div key={i} style={{ display: "flex", alignItems: "baseline", gap: "0.3rem" }}>
-          <span style={{ color: C.accent, fontWeight: "bold" }}>–</span>
+        <div key={i} style={{ display: "flex", alignItems: "flex-end", gap: "0.3rem" }}>
+          <span style={{ color: C.accent, fontWeight: "bold", fontSize: "1rem" }}>–</span>
           <input value={v} onChange={e => update(i, e.target.value)} style={{ ...fieldStyle, flex: 1 }} />
         </div>
       ))}
@@ -172,54 +172,116 @@ function RecipeModal({ recipe, onSave, onDelete, onClose, defaultSection }) {
   const [time, setTime]       = useState(recipe?.cook_time || "");
   const [serves, setServes]   = useState(recipe?.servings || "");
   const [notes, setNotes]     = useState(recipe?.notes || "");
+  const [source, setSource]   = useState(recipe?.source || "");
   const [rating, setRating]   = useState(recipe?.rating || 0);
   const [showPicker, setShowPicker] = useState(false);
 
   const save = () => {
     if (!title.trim()) return;
-    onSave({
-      id: recipe?.id || `rec-${Date.now()}`,
-      title: title.trim(), section_name: secName,
+    
+    const dataToSave = {
+      title: title.trim(),
+      section_name: secName,
       ingredients: ings.split("\n").filter(Boolean),
       method: method.split("\n").filter(Boolean),
-      temp, cook_time: time, servings: serves, notes, rating
-    });
+      temp, cook_time: time, servings: serves, notes, source, rating
+    };
+    
+    // Only pass ID if updating; let Supabase generate new IDs
+    if (recipe?.id) dataToSave.id = recipe.id;
+    
+    onSave(dataToSave);
   };
 
-  const uLine = { background: "transparent", border: "none", borderBottom: `1.5px solid ${C.inkMid}`, color: C.ink, padding: "0.2rem", fontSize: "0.9rem", outline: "none", width: "100%" };
+  const uLine = { background: "transparent", border: "none", borderBottom: `1px solid ${C.inkMid}`, color: C.ink, padding: "0.1rem 0", fontSize: "0.95rem", outline: "none", width: "100%" };
+  const toTitleCase = (str) => str.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
-      <div style={{ background: C.pageInner, borderRadius: 6, width: "100%", maxWidth: 440, padding: "1.5rem", ...ruled }}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
-          <h2 style={{ margin: 0, fontFamily: C.font }}>Recipe Input</h2>
-          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: "1.5rem", cursor: "pointer" }}>×</button>
+      <div style={{ background: C.pageInner, borderRadius: 6, width: "100%", maxWidth: 440, display: "flex", flexDirection: "column", maxHeight: "90vh" }}>
+        
+        {/* Header */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1.2rem", borderBottom: `1px solid ${C.line}` }}>
+          <h2 style={{ margin: 0, fontFamily: C.fontSans, fontSize: "1.1rem", fontWeight: "bold" }}>Recipe Input Popup</h2>
+          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: "1.2rem", cursor: "pointer", color: "#666" }}>×</button>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
-          <input placeholder="Recipe Name" value={title} onChange={e => setTitle(e.target.value)} style={{ ...uLine, fontSize: "1.1rem" }} />
+
+        {/* Scrollable Body */}
+        <div style={{ overflowY: "auto", padding: "1.2rem", ...ruled, backgroundPositionY: "0px" }}>
+          
+          <div style={{ display: "flex", alignItems: "flex-end", marginBottom: "1rem", gap: "0.5rem" }}>
+            <label style={{ fontSize: "1rem", fontFamily: C.fontSans }}>Name:</label>
+            <input value={title} onChange={e => setTitle(e.target.value)} style={{ ...uLine, flex: 1, fontSize: "1rem" }} />
+          </div>
+
+          <div style={{ marginBottom: "0.4rem", fontSize: "1rem", fontFamily: C.fontSans }}>Ingredients:</div>
           <IngredientGrid value={ings} onChange={setIngs} fieldStyle={uLine} />
-          <div style={{ display: "flex", gap: "1rem" }}>
-            <div style={{ flex: 1 }}>
-              <input placeholder="Temp" value={temp} onChange={e => setTemp(e.target.value)} style={uLine} />
-              <input placeholder="Cook Time" value={time} onChange={e => setTime(e.target.value)} style={uLine} />
-            </div>
-            <div style={{ position: "relative" }}>
-              <button onClick={() => setShowPicker(!showPicker)} style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 4, padding: "0.5rem 1rem", cursor: "pointer" }}>{secName}</button>
-              {showPicker && (
-                <div style={{ position: "absolute", bottom: "100%", right: 0, background: "#fff", border: `1px solid ${C.line}`, borderRadius: 4, zIndex: 10, maxHeight: 200, overflowY: "auto" }}>
-                  {FIXED_TABS.slice(1).map(t => (
-                    <button key={t} onClick={() => { setSecName(t); setShowPicker(false); }} style={{ display: "block", width: "100%", padding: "0.5rem", border: "none", background: "none", cursor: "pointer", textAlign: "left" }}>{t}</button>
-                  ))}
+
+          {/* Outlined Recipe Info Box */}
+          <div style={{ border: `1px solid ${C.inkMid}`, borderRadius: 4, padding: "1rem", marginTop: "1.5rem", background: "transparent", fontFamily: C.fontSans }}>
+            <h3 style={{ margin: "0 0 1rem 0", fontSize: "1rem", fontWeight: "bold" }}>Recipe Info</h3>
+            
+            <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "1rem", alignItems: "start", marginBottom: "0.5rem" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: "0.5rem" }}>
+                  <label style={{ width: "45px" }}>Temp:</label>
+                  <input value={temp} onChange={e => setTemp(e.target.value)} style={{ ...uLine, flex: 1 }} />
                 </div>
-              )}
+                <div style={{ display: "flex", alignItems: "flex-end", gap: "0.5rem" }}>
+                  <label style={{ width: "45px" }}>Time:</label>
+                  <input value={time} onChange={e => setTime(e.target.value)} style={{ ...uLine, flex: 1 }} />
+                </div>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: "0.5rem" }}>
+                  <label style={{ width: "45px" }}>Serves:</label>
+                  <input value={serves} onChange={e => setServes(e.target.value)} style={{ ...uLine, flex: 1 }} />
+                </div>
+              </div>
+              
+              <div style={{ position: "relative" }}>
+                <button onClick={() => setShowPicker(!showPicker)} style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 8, padding: "0.5rem 1rem", cursor: "pointer", fontWeight: "bold", fontSize: "0.9rem" }}>
+                  {toTitleCase(secName)}
+                </button>
+                {showPicker && (
+                  <div style={{ position: "absolute", top: "100%", right: 0, background: "#fff", border: `1px solid ${C.line}`, borderRadius: 4, zIndex: 10, maxHeight: 200, overflowY: "auto", marginTop: "4px", boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
+                    {FIXED_TABS.slice(1).map(t => (
+                      <button key={t} onClick={() => { setSecName(t); setShowPicker(false); }} style={{ display: "block", width: "100%", padding: "0.6rem 1rem", border: "none", background: "none", cursor: "pointer", textAlign: "left", whiteSpace: "nowrap", fontFamily: C.fontSans }}>
+                        {toTitleCase(t)}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-          <textarea placeholder="Instructions..." value={method} onChange={e => setMethod(e.target.value)} style={{ ...uLine, height: 80, resize: "none" }} />
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <Stars value={rating} onChange={setRating} />
-            <button onClick={save} style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 4, padding: "0.6rem 2rem", fontWeight: "bold", cursor: "pointer" }}>SAVE</button>
+
+            <div style={{ display: "flex", alignItems: "flex-end", gap: "0.5rem", marginBottom: "0.6rem", marginTop: "0.8rem" }}>
+              <label>Instructions:</label>
+              <textarea value={method} onChange={e => setMethod(e.target.value)} style={{ ...uLine, flex: 1, resize: "none", overflow: "hidden", minHeight: "29px" }} rows={3} />
+            </div>
+            
+            <div style={{ display: "flex", alignItems: "flex-end", gap: "0.5rem", marginBottom: "0.6rem" }}>
+              <label style={{ width: "50px" }}>Notes:</label>
+              <input value={notes} onChange={e => setNotes(e.target.value)} style={{ ...uLine, flex: 1 }} />
+            </div>
+
+            <div style={{ display: "flex", alignItems: "flex-end", gap: "0.5rem", marginBottom: "0.8rem" }}>
+              <label style={{ width: "50px" }}>Source:</label>
+              <input value={source} onChange={e => setSource(e.target.value)} style={{ ...uLine, flex: 1 }} />
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <label style={{ width: "50px" }}>Rating:</label>
+              <Stars value={rating} onChange={setRating} />
+            </div>
           </div>
         </div>
+        
+        {/* Footer */}
+        <div style={{ padding: "1rem", display: "flex", justifyContent: "flex-end", borderTop: `1px solid ${C.line}` }}>
+          <button onClick={save} style={{ background: "#fff", color: "#000", border: "1.5px solid #000", borderRadius: 4, padding: "0.5rem 1.5rem", fontWeight: "bold", cursor: "pointer", fontSize: "0.9rem", letterSpacing: "1px" }}>
+            SAVE
+          </button>
+        </div>
+
       </div>
     </div>
   );
@@ -247,9 +309,10 @@ export default function Cookbook() {
     setRecipeModal(null);
   };
 
+  // Fix: Make section filtering case-insensitive
   const filtered = search
     ? recipes.filter(r => r.title.toLowerCase().includes(search.toLowerCase()))
-    : recipes.filter(r => r.section_name === activeTab);
+    : recipes.filter(r => r.section_name && r.section_name.toUpperCase() === activeTab.toUpperCase());
 
   if (authUser === undefined) return null;
   if (!authUser) return <AuthPage onAuth={setAuthUser} />;
