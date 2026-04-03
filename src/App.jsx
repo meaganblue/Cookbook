@@ -25,7 +25,7 @@ const C = {
   fontSans:    "'Trebuchet MS', 'Gill Sans', Calibri, sans-serif",
 };
 
-const FIXED_TABS = ["🏠", "SAUCES & SPICES", "SOUPS & SALADS", "SNACKS", "VEGGIES", "PASTA", "RICE", "MEATS", "POULTRY & FISH", "SLOW COOKER & CANNING"];
+const FIXED_TABS = ["🏠", "Sauces & Spices", "Soups & Salads", "Sacks", "Veg", "Pasta", "Rice", "Meats", "Poultry & Fish", "Slow Cooker & Canning"];
 
 const ruled = {
   backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent 29px, ${C.line} 29px, ${C.line} 30px)`,
