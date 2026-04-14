@@ -25,7 +25,8 @@ const C = {
   fontSans:    "'Trebuchet MS', 'Gill Sans', Calibri, sans-serif",
 };
 
-const FIXED_TABS = ["🏠", "Sauces & Spices", "Soups & Salads", "Sacks", "Veg", "Pasta", "Rice", "Meats", "Poultry & Fish", "Slow Cooker & Canning"];
+// Fixed "Sacks" to "Snacks"
+const FIXED_TABS = ["🏠", "Sauces & Spices", "Soups & Salads", "Snacks", "Veg", "Pasta", "Rice", "Meats", "Poultry & Fish", "Slow Cooker & Canning"];
 
 const ruled = {
   backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent 29px, ${C.line} 29px, ${C.line} 30px)`,
@@ -187,9 +188,7 @@ function RecipeModal({ recipe, onSave, onDelete, onClose, defaultSection }) {
       temp, cook_time: time, servings: serves, notes, source, rating
     };
     
-    // Only pass ID if updating; let Supabase generate new IDs
     if (recipe?.id) dataToSave.id = recipe.id;
-    
     onSave(dataToSave);
   };
 
@@ -197,17 +196,20 @@ function RecipeModal({ recipe, onSave, onDelete, onClose, defaultSection }) {
   const toTitleCase = (str) => str.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
-      <div style={{ background: C.pageInner, borderRadius: 6, width: "100%", maxWidth: 440, display: "flex", flexDirection: "column", maxHeight: "90vh" }}>
+    <div style={{ position: "fixed", inset: 0, background: "#2A1545", zIndex: 200, display: "flex", padding: "0.5rem", flexDirection: "column" }}>
+      <div style={{ flex: 1, background: C.paper, borderRadius: 8, overflow: "hidden", display: "flex", flexDirection: "column", border: `2px solid ${C.spineFaint}` }}>
         
-        {/* Header */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1.2rem", borderBottom: `1px solid ${C.line}` }}>
-          <h2 style={{ margin: 0, fontFamily: C.fontSans, fontSize: "1.1rem", fontWeight: "bold" }}>Recipe Input Popup</h2>
-          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: "1.2rem", cursor: "pointer", color: "#666" }}>×</button>
+        {/* Header - Styled like main page header */}
+        <div style={{ background: C.paper, borderBottom: `1px solid ${C.spineFaint}`, padding: "0.6rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontFamily: C.font, fontWeight: "bold", fontSize: "1.2rem" }}>Recipe Details</span>
+          <div>
+            <button onClick={save} style={{ background: C.accent, border: "none", borderRadius: 3, padding: "0.2rem 0.8rem", fontSize: "0.8rem", color: "#fff", cursor: "pointer", fontWeight: "bold", marginRight: "0.5rem" }}>Save</button>
+            <button onClick={onClose} style={{ background: "none", border: `1px solid ${C.inkMid}`, borderRadius: 3, padding: "0.2rem 0.5rem", fontSize: "0.8rem", cursor: "pointer" }}>Close</button>
+          </div>
         </div>
 
         {/* Scrollable Body */}
-        <div style={{ overflowY: "auto", padding: "1.2rem", ...ruled, backgroundPositionY: "0px" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "1.2rem", ...ruled, backgroundPositionY: "0px", background: C.pageInner }}>
           
           <div style={{ display: "flex", alignItems: "flex-end", marginBottom: "1rem", gap: "0.5rem" }}>
             <label style={{ fontSize: "1rem", fontFamily: C.fontSans }}>Name:</label>
@@ -274,13 +276,6 @@ function RecipeModal({ recipe, onSave, onDelete, onClose, defaultSection }) {
             </div>
           </div>
         </div>
-        
-        {/* Footer */}
-        <div style={{ padding: "1rem", display: "flex", justifyContent: "flex-end", borderTop: `1px solid ${C.line}` }}>
-          <button onClick={save} style={{ background: "#fff", color: "#000", border: "1.5px solid #000", borderRadius: 4, padding: "0.5rem 1.5rem", fontWeight: "bold", cursor: "pointer", fontSize: "0.9rem", letterSpacing: "1px" }}>
-            SAVE
-          </button>
-        </div>
 
       </div>
     </div>
@@ -292,7 +287,6 @@ export default function Cookbook() {
   const [recipes, setRecipes]         = useState([]);
   const [activeTab, setActiveTab]     = useState("🏠");
   const [recipeModal, setRecipeModal] = useState(null);
-  const [search, setSearch]           = useState("");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setAuthUser(session?.user || null));
@@ -309,10 +303,13 @@ export default function Cookbook() {
     setRecipeModal(null);
   };
 
-  // Fix: Make section filtering case-insensitive
-  const filtered = search
-    ? recipes.filter(r => r.title.toLowerCase().includes(search.toLowerCase()))
-    : recipes.filter(r => r.section_name && r.section_name.toUpperCase() === activeTab.toUpperCase());
+  // Search removed entirely, filtering just by section
+  const filtered = recipes.filter(r => r.section_name && r.section_name.toUpperCase() === activeTab.toUpperCase());
+
+  // Function to visually shorten long tab names without breaking the database link
+  const getShortTabName = (name) => {
+    return name.replace(" & Spices", "").replace(" & Salads", "").replace(" & Fish", "").replace(" & Canning", "");
+  };
 
   if (authUser === undefined) return null;
   if (!authUser) return <AuthPage onAuth={setAuthUser} />;
@@ -343,8 +340,7 @@ export default function Cookbook() {
               </div>
             ) : (
               <div>
-                <input placeholder="Search recipes..." value={search} onChange={e => setSearch(e.target.value)} style={{ width: "100%", padding: "0.5rem", marginBottom: "1rem", borderRadius: 4, border: `1px solid ${C.line}` }} />
-                <h3 style={{ fontFamily: C.font }}>{activeTab}</h3>
+                <h3 style={{ fontFamily: C.font, marginTop: 0 }}>{activeTab}</h3>
                 {filtered.map(r => (
                   <div key={r.id} onClick={() => setRecipeModal(r)} style={{ background: "#fff", padding: "0.8rem", borderRadius: 4, marginBottom: "0.5rem", border: `1px solid ${C.line}`, cursor: "pointer" }}>
                     <div style={{ fontWeight: "bold" }}>{r.title}</div>
@@ -360,19 +356,20 @@ export default function Cookbook() {
             {FIXED_TABS.map(tab => (
               <button
                 key={tab}
-                onClick={() => { setActiveTab(tab); setSearch(""); }}
-                style={{ flex: 1, background: activeTab === tab ? C.pageInner : "#4A2A6A", border: "none", borderRadius: "0 6px 6px 0", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}
+                onClick={() => setActiveTab(tab)}
+                style={{ flex: 1, minHeight: 0, background: activeTab === tab ? C.pageInner : "#4A2A6A", border: "none", borderRadius: "0 6px 6px 0", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}
               >
-                <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.45rem", fontWeight: "bold", color: activeTab === tab ? C.accent : "#C9B8FF" }}>
-                  {tab}
+                <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", fontSize: "0.48rem", fontWeight: "bold", color: activeTab === tab ? C.accent : "#C9B8FF", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxHeight: "100%" }}>
+                  {getShortTabName(tab)}
                 </span>
               </button>
             ))}
+            {/* Shortened "NEW" button to save vertical space */}
             <button
               onClick={() => setRecipeModal({})}
-              style={{ background: C.accent, border: "none", borderRadius: "18px", color: "#fff", padding: "0.28rem 0.65rem", fontSize: "0.75rem", fontFamily: C.fontSans, fontWeight: "bold", cursor: "pointer", marginTop: "10px" }}
+              style={{ background: C.accent, border: "none", borderRadius: "18px", color: "#fff", padding: "0.3rem 0", fontSize: "0.6rem", fontFamily: C.fontSans, fontWeight: "bold", cursor: "pointer", marginTop: "10px", width: "80%", alignSelf: "center" }}
             >
-              + RECIPE
+              + NEW
             </button>
           </div>
 
@@ -380,6 +377,7 @@ export default function Cookbook() {
 
         {recipeModal && (
           <RecipeModal
+            key={recipeModal.id || `new-${activeTab}`} // This key ensures the component fully resets when you add a new recipe
             recipe={recipeModal.id ? recipeModal : null}
             defaultSection={activeTab !== "🏠" ? activeTab : null}
             onSave={saveRecipe}
