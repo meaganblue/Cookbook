@@ -3,12 +3,12 @@
   "name": "Meagan's Cookbook",
   "icons": [
     {
-      "src": "logo192.png",
+      "src": "Cookicon.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "Cookicon.png",
       "type": "image/png",
       "sizes": "512x512"
     }
